@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import Home from './Components/home';
 import Footer from './Components/footer';
 import Header from './Components/header';
+import AssistantPage from './Components/assistantPage';
 import { BrowserRouter as Router, Route, Switch, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 const ScrollToTop = () => {
@@ -18,6 +19,7 @@ function App() {
       <Header />
       <Switch>
         <Route exact path="/" render={() => { return (<Home />) }}></Route>
+        <Route exact path="/chat"><AssistantPage /></Route>
       </Switch>
       <Footer />
     </Router >
