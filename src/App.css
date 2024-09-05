@@ -7,3 +7,61 @@ body {
     font-family: "DM Sans";
     background-color: black;
 }
+
+.vertical-tabs {
+    height: 100%;
+    display: flex;
+    position: relative;
+    flex-direction: row;
+}
+
+.tab-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-item {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tab-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.vertical-tabs .tab-list {
+    width: 15%;
+    transition: width 0.3s ease;
+}
+
+/* .vertical-tabs .tab-list:hover {
+   width: 15%; 
+}*/
+
+.vertical-tabs .tab-item {
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    transition: background-color 0.25s ease;
+}
+
+.vertical-tabs .tab-icon {
+    display: flex;
+    margin-right: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .vertical-tabs .tab-text {
+    display: none; 
+}*/
+
+.vertical-tabs .tab-list:hover .tab-text {
+    display: inline;
+    /* margin-left: 10px; */
+}
+
+.vertical-tabs .tab-list:hover .tab-item {
+    justify-content: flex-start;
+}
