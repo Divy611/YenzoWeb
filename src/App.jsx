@@ -1,11 +1,11 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Home from './Components/home';
 import About from './Components/about';
 import Footer from './Components/footer';
-import Header, { AssistantHeader } from './Components/header';
 import Contact from './Components/contact';
 import AssistantPage from './Components/assistantPage';
+import Header, { AssistantHeader } from './Components/header';
 import { BrowserRouter as Router, Switch, useLocation, Route } from 'react-router-dom/cjs/react-router-dom.min';
 
 const ScrollToTop = () => {

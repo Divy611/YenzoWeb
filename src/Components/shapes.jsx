@@ -1,12 +1,12 @@
 import * as THREE from "three"
 import React, { useState, useEffect, useRef } from 'react'
 
-export const Globe = () => {
+export function Globe() {
     const mountRef = useRef(null);
 
     useEffect(() => {
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(57, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         mountRef.current.appendChild(renderer.domElement);
@@ -16,7 +16,6 @@ export const Globe = () => {
         const material = new THREE.MeshBasicMaterial({ color: 0x43A047, wireframe: true });
         const sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
-
         const particlesCount = 1000;
         const positions = new Float32Array(particlesCount * 3);
         const speeds = new Float32Array(particlesCount);
@@ -36,7 +35,12 @@ export const Globe = () => {
         const particlesGeometry = new THREE.BufferGeometry();
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-        const particlesMaterial = new THREE.PointsMaterial({ size: 0.05, color: 0xffffff, transparent: true, opacity: 0.8, });
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.8,
+        });
 
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
@@ -53,12 +57,12 @@ export const Globe = () => {
 
         window.addEventListener('mousemove', onMouseMove);
 
-        const animate = () => {
-            requestAnimationFrame(animate);
+        let animationFrameId;
 
+        const animate = () => {
+            animationFrameId = requestAnimationFrame(animate);
             sphere.rotation.x += mouseY * 0.05;
             sphere.rotation.y += mouseX * 0.05;
-
             const positions = particlesMesh.geometry.attributes.position.array;
 
             for (let i = 0; i < particlesCount; i++) {
@@ -81,10 +85,32 @@ export const Globe = () => {
         };
 
         animate();
+        const handleResize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+
+        window.addEventListener('resize', handleResize);
 
         return () => {
+            cancelAnimationFrame(animationFrameId);
             window.removeEventListener('mousemove', onMouseMove);
-            mountRef.current.removeChild(renderer.domElement);
+            window.removeEventListener('resize', handleResize);
+
+            geometry.dispose();
+            particlesGeometry.dispose();
+
+            material.dispose();
+            particlesMaterial.dispose();
+
+            scene.remove(sphere);
+            scene.remove(particlesMesh);
+
+            renderer.dispose();
+            if (mountRef.current) {
+                mountRef.current.removeChild(renderer.domElement);
+            }
         };
     }, []);
 

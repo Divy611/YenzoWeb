@@ -2,55 +2,54 @@ import Logo from "../assets/logo.png"
 import React, { useState } from 'react'
 import Logo1 from "../assets/logo1.png"
 import { Link } from 'react-router-dom/cjs/react-router-dom'
+
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
     return (
         <header className="relative p-3">
-            <div className="container px-6 py-3 mx-auto md:flex">
-                <div className="flex items-center justify-between">
-                    <Link to="/"><img className="w-auto h-6 sm:h-7" src={Logo} alt="" /></Link>
-                    <div className="flex lg:hidden">
-                        <button type="button" className="text-gray-500 hover:text-white focus:outline-none focus:text-white" aria-label="toggle menu" onClick={toggleMenu}>
-                            {isMenuOpen ? (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            ) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
-                                </svg>
-                            )}
-                        </button>
-                    </div>
+            <div className="container px-6 py-3 mx-auto flex justify-between items-center">
+                <Link to="/">
+                    <img className="w-auto h-6 sm:h-7" src={Logo} alt="" />
+                </Link>
+                <div className="hidden md:flex items-center">
+                    <Link to="/" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Home</Link>
+                    <Link to="/about" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">About</Link>
+                    <Link to="/contact" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Contact</Link>
                 </div>
-                <div className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out md:mt-0 md:p-0 md:top-0 md:relative md:opacity-100 md:translate-x-0 md:flex md:items-center md:justify-between ${isMenuOpen ? 'translate-x-0 opacity-100 bg-black' : 'opacity-0 -translate-x-full'
-                    } md:translate-x-0 md:opacity-100`}>
-                    <div className="flex flex-col px-2 -mx-4 md:flex-row md:mx-10 md:py-0">
-                        <Link to="/" className="px-2.5 py-2 text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Home</Link>
-                        <Link to="/about" className="px-2.5 py-2 text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">About</Link>
-                        <Link to="/contact" className="px-2.5 py-2 text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Contact</Link>
-                    </div>
-                    <div className="relative mt-4 md:mt-0">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                            <svg className="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none">
-                                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                <div className="md:hidden">
+                    <button type="button" className="text-gray-500 hover:text-white focus:outline-none focus:text-white" aria-label="toggle menu" onClick={toggleMenu}>
+                        {isMenuOpen ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
-                        </span>
-                        <input type="text" className="w-full py-2 pl-10 pr-4 text-gray-700 bg-transparent border rounded-md focus:border-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300" placeholder="Search" />
-                    </div>
+                        ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
+                            </svg>
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            <div className={`md:hidden absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-black ${isMenuOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'}`}>
+                <div className="flex flex-col px-2 -mx-4">
+                    <Link to="/" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Home</Link>
+                    <Link to="/about" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">About</Link>
+                    <Link to="/contact" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Contact</Link>
                 </div>
             </div>
         </header>
     );
-};
+}
 
 
 export function AssistantHeader() {
     const [isOpen, setIsOpen] = useState(false);
     const toggleMenu = () => setIsOpen(!isOpen);
     return (
-        <header className="shadow" style={{ backgroundColor: "#16151A" }}>
+        <header className="shadow" style={{ backgroundColor: "#0E0D12" }}>
             <div className="container px-6 py-8 mx-auto">
                 <div className="lg:flex lg:items-center">
                     <div className="flex items-center justify-between">
@@ -70,13 +69,64 @@ export function AssistantHeader() {
                         </div>
                     </div>
 
-                    <div className={`${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'} absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between`} style={{ backgroundColor: "#16151A" }}>
+                    <div className={`${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'} absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between`} style={{ backgroundColor: "#0E0D12" }}>
                         <div className="flex flex-col text-white capitalize lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900">features</a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900">downloads</a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900">docs</a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900">support</a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4 hover:text-gray-900">blog</a>
+                            {/* <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a> */}
+                        </div>
+
+                        <div className="flex justify-center mt-6 lg:flex lg:mt-0 lg:-mx-2">
+                            <div className="border border-white px-2 items-center justify-center text-center h-full mx-2 hover:text-gray-500">
+                                <Link to="/chat" className="text-white transition-colors duration-300 transform"></Link>
+                            </div>
+                            <div className="border border-white px-2 items-center justify-center text-center h-full mx-2 hover:text-gray-500">
+                                <Link to="/chat" className="text-white transition-colors duration-300 transform"></Link>
+                            </div>
+                            <div className="border border-white px-2 items-center justify-center text-center h-full mx-2 hover:text-gray-500">
+                                <Link to="/chat" className="text-white transition-colors duration-300 transform"></Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    )
+}
+
+export function LoginHeader() {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleMenu = () => setIsOpen(!isOpen);
+    return (
+        <header className="shadow" style={{ backgroundColor: "#0E0D12" }}>
+            <div className="container px-6 py-8 mx-auto">
+                <div className="lg:flex lg:items-center">
+                    <div className="flex items-center justify-between">
+                        <Link to="/"><img className="w-auto h-6 sm:h-7" src={Logo1} alt="" /></Link>
+                        <div className="flex lg:hidden">
+                            <button onClick={toggleMenu} type="button" className="text-gray-500 hover:text-white focus:outline-none focus:text-white" aria-label="toggle menu">
+                                {!isOpen ? (
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 8h16M4 16h16" />
+                                    </svg>
+                                ) : (
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className={`${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'} absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between`} style={{ backgroundColor: "#0E0D12" }}>
+                        <div className="flex flex-col text-white capitalize lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4">features</a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4">downloads</a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4">docs</a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4">support</a>
+                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4">blog</a>
                         </div>
 
                         <div className="flex justify-center mt-6 lg:flex lg:mt-0 lg:-mx-2">

@@ -27,7 +27,8 @@ body {
 
 .tab-content {
     flex: 1;
-    padding: 20px;
+    height: max-content;
+    /* padding: 20px; */
 }
 
 .vertical-tabs .tab-list {
@@ -35,9 +36,17 @@ body {
     transition: width 0.3s ease;
 }
 
-/* .vertical-tabs .tab-list:hover {
-   width: 15%; 
-}*/
+@media only screen and (max-width: 1020px) {
+    .globe {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .graphs {
+        display: none;
+    }
+}
 
 .vertical-tabs .tab-item {
     display: flex;
@@ -53,13 +62,8 @@ body {
     justify-content: center;
 }
 
-/* .vertical-tabs .tab-text {
-    display: none; 
-}*/
-
 .vertical-tabs .tab-list:hover .tab-text {
     display: inline;
-    /* margin-left: 10px; */
 }
 
 .vertical-tabs .tab-list:hover .tab-item {
