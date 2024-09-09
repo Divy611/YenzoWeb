@@ -28,11 +28,10 @@ body {
 .tab-content {
     flex: 1;
     height: max-content;
-    /* padding: 20px; */
 }
 
 .vertical-tabs .tab-list {
-    width: 15%;
+    width: 18.5%;
     transition: width 0.3s ease;
 }
 

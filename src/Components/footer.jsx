@@ -9,50 +9,23 @@ export default function Footer() {
                 <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
                     <Link to="/" className="flex title-font font-medium items-center md:justify-start justify-center"><img src={Logo} className='w-1/2' alt="" /></Link>
                 </div>
-                <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
+                <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-12 md:text-left text-center">
+                    <div className="lg:w-1/4 md:w-1/2 w-full px-4"></div>
+                    <div className="lg:w-1/4 md:w-1/2 w-full px-4"></div>
+                    <NavSection />
                     <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                        <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">CATEGORIES</h2>
-                        <nav className="list-none mb-10">
-                            <li><a className="text-gray-300 hover:text-gray-500">First Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Second Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Third Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Fourth Link</a></li>
-                        </nav>
-                    </div>
-                    <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                        <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">CATEGORIES</h2>
-                        <nav className="list-none mb-10">
-                            <li><a className="text-gray-300 hover:text-gray-500">First Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Second Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Third Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Fourth Link</a></li>
-                        </nav>
-                    </div>
-                    <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                        <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">CATEGORIES</h2>
-                        <nav className="list-none mb-10">
-                            <li><a className="text-gray-300 hover:text-gray-500">First Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Second Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Third Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Fourth Link</a></li>
-                        </nav>
-                    </div>
-                    <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                        <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">CATEGORIES</h2>
-                        <nav className="list-none mb-10">
-                            <li><a className="text-gray-300 hover:text-gray-500">First Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Second Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Third Link</a></li>
-                            <li><a className="text-gray-300 hover:text-gray-500">Fourth Link</a></li>
+                        <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">Product</h2>
+                        <nav className="list-none mb-12">
+                            <li><Link to="/pricing" className="py-3 text-gray-300 hover:text-gray-500">Pricing</Link></li>
+                            <li><Link to="/privacy" className="py-3 text-gray-300 hover:text-gray-500">Privacy Policy</Link></li>
+                            <li><Link to="/terms" className="py-3 text-gray-300 hover:text-gray-500">Terms of Service</Link></li>
                         </nav>
                     </div>
                 </div>
             </div>
-            <div className="text-gray-600 body-font w-full">
+            <div className="w-full">
                 <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col justify-between">
-                    <p className="text-sm text-gray-300 sm:py-2 sm:mt-0 mt-4">Copyright © 2024 Orato
-                        {/* <Link to="" className="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank"></Link> */}
-                    </p>
+                    <p className="text-sm text-gray-300 sm:py-2 sm:mt-0 mt-4">Copyright © 2024 Orato</p>
                     <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
                         <Link to="" className="text-gray-500 hover:text-white">
                             <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">
@@ -80,5 +53,18 @@ export default function Footer() {
                 </div>
             </div>
         </footer>
+    )
+}
+
+const NavSection = () => {
+    return (
+        <div className="lg:w-1/4 md:w-1/2 w-full px-4">
+            <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">Company</h2>
+            <nav className="list-none mb-12">
+                <li><Link to="/about" className="py-3 text-gray-300 hover:text-gray-500">About</Link></li>
+                <li><Link to="/contact" className="py-3 text-gray-300 hover:text-gray-500">Contact Us</Link></li>
+                <li><Link to="/team" className="py-3 text-gray-300 hover:text-gray-500">Our Team</Link></li>
+            </nav>
+        </div>
     )
 }

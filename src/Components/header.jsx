@@ -17,6 +17,7 @@ export default function Header() {
                     <Link to="/" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Home</Link>
                     <Link to="/about" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">About</Link>
                     <Link to="/contact" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Contact</Link>
+                    <Link to="/pricing" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Pricing</Link>
                 </div>
                 <div className="md:hidden">
                     <button type="button" className="text-gray-500 hover:text-white focus:outline-none focus:text-white" aria-label="toggle menu" onClick={toggleMenu}>
@@ -38,6 +39,7 @@ export default function Header() {
                     <Link to="/" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Home</Link>
                     <Link to="/about" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">About</Link>
                     <Link to="/contact" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Contact</Link>
+                    <Link to="/pricing" className="px-2.5 py-2 text-lg text-gray-300 transition-colors duration-300 transform rounded-md hover:bg-gray-100 hover:text-black md:mx-2">Pricing</Link>
                 </div>
             </div>
         </header>
@@ -71,22 +73,23 @@ export function AssistantHeader() {
 
                     <div className={`${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'} absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between`} style={{ backgroundColor: "#0E0D12" }}>
                         <div className="flex flex-col text-white capitalize lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
-                            {/* <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a>
-                            <a href="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4"></a> */}
+                            <Link to="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4">
+                                <button className="flex items-center text-green-500 border border-green-600 p-2 rounded-lg text-xs"><i class="fa-solid fa-plus"></i><h1 className="ml-2">New Chat</h1></button>
+                            </Link>
+                            <Link to="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-1">
+                                <button className="h-8 w-8 rounded-full text-green-500 border border-green-600"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                            </Link>
                         </div>
 
                         <div className="flex justify-center mt-6 lg:flex lg:mt-0 lg:-mx-2">
-                            <div className="border border-white px-2 items-center justify-center text-center h-full mx-2 hover:text-gray-500">
-                                <Link to="/chat" className="text-white transition-colors duration-300 transform"></Link>
+                            <div className="border border-green-500 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-500">
+                                <Link className="transition-colors duration-300 transform"><i className="fa-regular fa-bookmark"></i></Link>
                             </div>
-                            <div className="border border-white px-2 items-center justify-center text-center h-full mx-2 hover:text-gray-500">
-                                <Link to="/chat" className="text-white transition-colors duration-300 transform"></Link>
+                            <div className="border border-green-500 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-500">
+                                <Link className="transition-colors duration-300 transform"><i className="fa-solid fa-layer-group"></i></Link>
                             </div>
-                            <div className="border border-white px-2 items-center justify-center text-center h-full mx-2 hover:text-gray-500">
-                                <Link to="/chat" className="text-white transition-colors duration-300 transform"></Link>
+                            <div className="border border-green-500 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-500">
+                                <Link className="transition-colors duration-300 transform"><i className="fa-regular fa-share-from-square"></i></Link>
                             </div>
                         </div>
                     </div>

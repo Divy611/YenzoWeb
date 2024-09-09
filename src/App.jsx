@@ -4,6 +4,7 @@ import Home from './Components/home';
 import About from './Components/about';
 import Footer from './Components/footer';
 import Contact from './Components/contact';
+import Pricing from './Components/pricing';
 import AssistantPage from './Components/assistantPage';
 import Header, { AssistantHeader } from './Components/header';
 import { BrowserRouter as Router, Switch, useLocation, Route } from 'react-router-dom/cjs/react-router-dom.min';
@@ -36,6 +37,7 @@ function AppContent() {
         <Route exact path="/" render={() => { return (<Home />) }}></Route>
         <Route exact path="/about" render={() => { return (<About />) }}></Route>
         <Route exact path="/contact" render={() => { return (<Contact />) }}></Route>
+        <Route exact path="/pricing" render={() => { return (<Pricing />) }}></Route>
         <Route exact path="/chat" render={() => { return (<AssistantPage />) }}></Route>
       </Switch>
       {shouldShowAuthHeader() ? <></> : location.pathname === '/chat' || location.pathname === '/login' ? <></> : <Footer />}
