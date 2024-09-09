@@ -39,7 +39,7 @@ const HeroSection = () => {
 const AssistantSection = () => {
     let { scrollYProgress } = useScroll();
     let parallaxScaleBottom = useTransform(scrollYProgress, [0, 1], [1, 3]);
-    let parallaxTranslateBottom = useTransform(scrollYProgress, [0, 3], ["135%", "50%"]);
+    let parallaxTranslateBottom = useTransform(scrollYProgress, [0, 3], ["150%", "50%"]);
     return (
         <motion.div className="px-10 py-24 mx-auto parallax-element" style={{ transform: parallaxTranslateBottom, scale: parallaxScaleBottom }}>
             <section className="">
@@ -63,7 +63,7 @@ const AssistantSection = () => {
 export const Stats = () => {
     return (
         <>
-            <motion.div className=" sm:px-2 py-36 graphs">
+            <motion.div className="sm:px-2 py-32 graphs">
                 <div className="px-10 flex justify-between items-end">
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="w-1/3 p-5">
                         <div className="h-[60vh] bg-gray-200 rounded-xl justify-between flex-col">

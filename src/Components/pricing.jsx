@@ -1,4 +1,7 @@
 import React from 'react'
+import { motion } from 'framer-motion'
+
+//create the pricingtile component
 
 export default function Pricing() {
     return (
@@ -11,7 +14,7 @@ export default function Pricing() {
                         <div className="w-16 h-1 rounded-full bg-green-500"></div>
                     </div>
                     <h1 className="text-5xl font-medium title-font mb-2 text-white">Pricing plans for teams of all sizes</h1>
-                    <p className="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-500">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical.</p>
+                    <p className="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-500">Get started for free. No credit card needed.</p>
                     <div className="flex mx-auto border-2 border-green-500 rounded overflow-hidden mt-6">
                         <button className="py-1 px-4 bg-green-500 text-white focus:outline-none">Monthly</button>
                         <button className="py-1 px-4 focus:outline-none text-white">Annually</button>
@@ -152,7 +155,8 @@ export default function Pricing() {
     )
 }
 
-const PricingTile = () => {
+const PricingTile = ({ feature1, feature2, feature3, feature4, feature5 }) => {
+    const features = [feature1, feature2, feature3, feature4, feature5];
     return (
         <div className="p-4 xl:w-1/4 md:w-1/2 w-full">
             <div className="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col relative overflow-hidden">
@@ -206,3 +210,6 @@ const PricingTile = () => {
         </div>
     )
 }
+
+
+//Initial no of lines: 210
