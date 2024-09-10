@@ -5,22 +5,15 @@ import { Link } from 'react-router-dom/cjs/react-router-dom'
 export default function Footer() {
     return (
         <footer className='justify-between'>
-            <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-                <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
+            <div className="container px-5 py-12 mx-auto text-lg flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
+                <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-end">
                     <Link to="/" className="flex title-font font-medium items-center md:justify-start justify-center"><img src={Logo} className='w-1/2' alt="" /></Link>
                 </div>
-                <div className="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-12 md:text-left text-center">
+                <div className="flex-grow flex flex-wrap md:pl-20 -mb-16 md:mt-0 mt-12 md:text-end text-center">
                     <div className="lg:w-1/4 md:w-1/2 w-full px-4"></div>
                     <div className="lg:w-1/4 md:w-1/2 w-full px-4"></div>
-                    <NavSection />
-                    <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-                        <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">Product</h2>
-                        <nav className="list-none mb-12">
-                            <li><Link to="/pricing" className="py-3 text-gray-300 hover:text-gray-500">Pricing</Link></li>
-                            <li><Link to="/privacy" className="py-3 text-gray-300 hover:text-gray-500">Privacy Policy</Link></li>
-                            <li><Link to="/terms" className="py-3 text-gray-300 hover:text-gray-500">Terms of Service</Link></li>
-                        </nav>
-                    </div>
+                    <NavSection header={"Company"} title1={"About"} link1={"/about"} title2={"Our Team"} link2={"/team"} title3={"Contact Us"} link3={"/contact"} />
+                    <NavSection header={"Product"} title1={"Pricing"} link1={"/pricing"} title2={"Privacy Policy"} link2={"/privacy"} title3={"Terms of Service"} link3={"/terms"} />
                 </div>
             </div>
             <div className="w-full">
@@ -56,14 +49,14 @@ export default function Footer() {
     )
 }
 
-const NavSection = () => {
+const NavSection = ({ header, title1, link1, title2, link2, title3, link3 }) => {
     return (
         <div className="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 className="title-font font-medium text-white tracking-widest text-sm mb-3">Company</h2>
+            <h2 className="title-font font-medium text-white tracking-widest text-xl mb-3">{header}</h2>
             <nav className="list-none mb-12">
-                <li><Link to="/about" className="py-3 text-gray-300 hover:text-gray-500">About</Link></li>
-                <li><Link to="/contact" className="py-3 text-gray-300 hover:text-gray-500">Contact Us</Link></li>
-                <li><Link to="/team" className="py-3 text-gray-300 hover:text-gray-500">Our Team</Link></li>
+                <li><Link to={link1} className="py-3 text-gray-300 hover:text-gray-500">{title1}</Link></li>
+                <li><Link to={link2} className="py-3 text-gray-300 hover:text-gray-500">{title2}</Link></li>
+                <li><Link to={link3} className="py-3 text-gray-300 hover:text-gray-500">{title3}</Link></li>
             </nav>
         </div>
     )

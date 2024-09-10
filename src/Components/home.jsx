@@ -25,9 +25,6 @@ const HeroSection = () => {
                     <h1 className="font-bold text-white xl:text-6xl sm:text-3xl"><span className='text-green-500'>ORATO.</span><br /> YOUR AI SPEECH COACH</h1>
                     <p className="mt-3 text-gray-300 text-xl">Mastering Communication,<br /> One word at a time...</p>
                 </div>
-                {/* <div className="flex items-center justify-center w-1/2 sm:none">
-                    <img className="object-cover object-center rounded-2xl rounded-r-none w-full h-[75vh] shadow-lg shadow-green-500 border border-green-600" src={Login} alt="" />
-                </div> */}
                 <div className="flex items-center justify-center mt-6 lg:mt-0 w-1/2 globe" style={{ overflowX: "hidden" }}>
                     <Globe />
                 </div>
@@ -41,22 +38,20 @@ const AssistantSection = () => {
     let parallaxScaleBottom = useTransform(scrollYProgress, [0, 1], [1, 3]);
     let parallaxTranslateBottom = useTransform(scrollYProgress, [0, 3], ["150%", "50%"]);
     return (
-        <motion.div className="px-10 py-24 mx-auto parallax-element" style={{ transform: parallaxTranslateBottom, scale: parallaxScaleBottom }}>
-            <section className="">
-                <div className="container mx-auto flex px-5 items-center justify-center flex-col">
-                    {/* <Laptop imageUrl={HomeSnap} /> */}
-                    <img className="w-4/6 mb-10 object-cover object-center rounded-2xl" alt="" src={HomeSnap} />
-                    <div className="text-center lg:w-2/3 w-full py-7">
-                        <h1 className="title-font text-6xl mb-4 font-semibold text-white">Improve your Oratory Skils</h1>
-                        <p className="mb-8 leading-relaxed text-gray-200 text-lg">Practice your speaking skills in private,<br /> without any embarrassment.</p>
-                        <div className="flex justify-center">
-                            <button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Button</button>
-                            <button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Button</button>
-                        </div>
-                    </div>
+        <motion.section className="px-10 py-24 mx-auto parallax-element" style={{ transform: parallaxTranslateBottom, scale: parallaxScaleBottom }}>
+            <div className="container mx-auto flex px-5 items-center justify-center flex-col">
+                {/* <Laptop imageUrl={HomeSnap} /> */}
+                <motion.img initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-4/6 mb-10 object-cover object-center rounded-2xl" alt="" src={HomeSnap} />
+                <div className="text-center lg:w-2/3 w-full py-7">
+                    <motion.h1 initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.15 }} className="title-font text-6xl mb-4 font-semibold text-white">Improve your Oratory Skils</motion.h1>
+                    <motion.p initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35 }} className="mb-8 leading-relaxed text-gray-200 text-lg">Practice your speaking skills in private,<br /> without any embarrassment.</motion.p>
+                    <motion.div initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.45 }} className="flex justify-center">
+                        <button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Button</button>
+                        <button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Button</button>
+                    </motion.div>
                 </div>
-            </section>
-        </motion.div>
+            </div>
+        </motion.section>
     )
 }
 

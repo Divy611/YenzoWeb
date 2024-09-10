@@ -15,7 +15,7 @@ const VerticalTabs = ({ tabs }) => {
     const handleClick = (index) => { setActiveTab(index); };
     return (
         <div className="vertical-tabs text-lg">
-            <div className="tab-list" style={{ backgroundColor: "#0E0D12" }}>
+            <div className="tab-list bg-[#0E0D12]">
                 <div className="h-full flex flex-col justify-between">
                     {tabs.map((tab, index) => (
                         <div key={index} className={`tab-item items-center px-3.5 py-4 ${index === activeTab ? 'active text-green-500 font-semibold' : 'text-white'}`} onClick={() => handleClick(index)}>
@@ -48,7 +48,7 @@ const VerticalTabs = ({ tabs }) => {
 
 const Search = () => {
     return (
-        <div style={{ backgroundColor: "#16151A" }} className="h-[85vh] flex flex-col justify-between items-center">
+        <div className="h-[85vh] flex flex-col justify-between items-center bg-[#16151A]">
             <div className=""></div>
             <div className="w-1/2 h-1/3 2xl:h-1/5 bg-[#0E0D12] rounded-2xl border border-green-500 shadow-md shadow-green-600">
                 <div className="p-4">
@@ -60,7 +60,8 @@ const Search = () => {
                 <div className="flex w-full h-full justify-center items-center px-10">
                     <div className="relative mr-4 w-full text-left flex items-center border border-green-600 rounded-xl">
                         <button className="text-green-500 px-4 py-3"><i className="fa-solid fa-microphone text-xl"></i></button>
-                        <input placeholder='Click on the Mic button on the right to respond!' type="text" id="hero-field" name="hero-field" className="w-full bg-transparent bg-opacity-50 focus:bg-transparent text-base outline-none text-green-100 p-3 leading-8 transition-colors duration-200 ease-in-out" />
+                        <div className="w-full bg-transparent bg-opacity-50 focus:bg-transparent text-base outline-none text-green-100 p-3 leading-8 transition-colors duration-200 ease-in-out"></div>
+                        {/* <input placeholder='Click on the Mic button on the right to respond!' type="text" id="hero-field" name="hero-field" className="w-full bg-transparent bg-opacity-50 focus:bg-transparent text-base outline-none text-green-100 p-3 leading-8 transition-colors duration-200 ease-in-out" /> */}
                         <button className="text-green-500 px-4 py-3"><i className="fa-solid fa-circle-chevron-right text-2xl"></i></button>
                     </div>
                 </div>

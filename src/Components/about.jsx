@@ -6,8 +6,8 @@ export default function About() {
     return (
         <>
             <MainSection />
-            <Stats />
             <Features />
+            <Stats />
             <EmailInput />
         </>
     )
@@ -53,26 +53,22 @@ const MainSection = () => {
 
 const Features = () => {
     return (
-        <section className="text-gray-600 body-font">
-            <div className="container px-5 py-24 mx-auto">
-                <div className="text-center mb-20">
-                    <div className="flex mt-6 justify-center items-center">
-                        <div className="w-16 h-1 rounded-full bg-green-500"></div>
-                        <span className='text-green-500 px-3'>Our Values</span>
-                        <div className="w-16 h-1 rounded-full bg-green-500"></div>
-                    </div>
-                    <h1 className="text-6xl font-bold title-font text-white mb-4 py-4">What we Offer</h1>
+        <section className="container px-7 py-8 mx-auto">
+            <div className="text-center mb-20">
+                <div className="flex mt-6 justify-center items-center">
+                    <div className="w-16 h-1 rounded-full bg-green-500"></div><span className='text-green-500 px-3'>Our Values</span><div className="w-16 h-1 rounded-full bg-green-500"></div>
                 </div>
-                <div className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4 md:space-y-0 space-y-6 py-10">
-                    <FeatureTile title={"User-Centricity"} subtitle={"We place the needs and goals of our users at the heart of everything we do, designing our platform to deliver a truly personalized and empowering experience."} />
-                    <FeatureTile title={"Continuous Improvement"} subtitle={"We are relentlessly committed to innovation, constantly enhancing our AI models and expanding our feature set to stay ahead of the curve."} />
-                    <FeatureTile title={"Attention to Detail"} subtitle={"We believe that mastering communication is in the subtle nuances, which is why we analyze and optimize every aspect of speech, language, and body language."} />
-                </div>
-                <div className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4 md:space-y-0 space-y-6 py-10">
-                    <FeatureTile title={"Empathy and Inclusivity"} subtitle={"We foster a culture of understanding, embracing diverse communication styles and catering to the unique needs of professionals from all backgrounds."} />
-                    <FeatureTile title={"Integrity and Transparency"} subtitle={"We are unwavering in our dedication to ethical AI practices, data privacy, and open communication with our users and stakeholders."} />
-                    <FeatureTile title={"Collaborative Spirit"} subtitle={"We believe that great ideas and solutions emerge from diverse perspectives, which is why we actively seek partnerships and community engagement."} />
-                </div>
+                <h1 className="text-6xl font-bold title-font text-white mb-4 py-4">What we Offer</h1>
+            </div>
+            <div className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4 md:space-y-0 space-y-6 py-6">
+                <FeatureTile title={"User-Centricity"} subtitle={"We place the needs and goals of our users at the heart of everything we do, designing our platform to deliver a truly personalized and empowering experience."} delay={0.15} />
+                <FeatureTile title={"Continuous Improvement"} subtitle={"We are relentlessly committed to innovation, constantly enhancing our AI models and expanding our feature set to stay ahead of the curve."} delay={0.25} />
+                <FeatureTile title={"Attention to Detail"} subtitle={"We believe that mastering communication is in the subtle nuances, which is why we analyze and optimize every aspect of speech, language, and body language."} delay={0.35} />
+            </div>
+            <div className="flex flex-wrap sm:-m-4 -mx-4 -mb-10 -mt-4 md:space-y-0 space-y-6 py-6">
+                <FeatureTile title={"Empathy and Inclusivity"} subtitle={"We foster a culture of understanding, embracing diverse communication styles and catering to the unique needs of professionals from all backgrounds."} delay={0.5} />
+                <FeatureTile title={"Integrity and Transparency"} subtitle={"We are unwavering in our dedication to ethical AI practices, data privacy, and open communication with our users and stakeholders."} delay={0.65} />
+                <FeatureTile title={"Collaborative Spirit"} subtitle={"We believe that great ideas and solutions emerge from diverse perspectives, which is why we actively seek partnerships and community engagement."} delay={0.75} />
             </div>
         </section>
     )
