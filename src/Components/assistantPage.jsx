@@ -31,7 +31,7 @@ const VerticalTabs = ({ tabs }) => {
                         </div>
                     </div>
                     <div className="p-2 bg-gray-800 h-1/6 rounded-xl rounded-b-none flex items-center">
-                        <img className="h-10 w-10 rounded-full bg-white" src='https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' />
+                        <img className="h-10 w-10 rounded-full bg-white" src='https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' alt='' />
                         <div className="flex-col ml-2 text-white">
                             <h1 className='text-md'>Divy Parikh</h1>
                             <h1 className='text-sm'>divy.parikh@hotmail.com</h1>

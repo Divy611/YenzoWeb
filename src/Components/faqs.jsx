@@ -18,7 +18,7 @@ export default function FAQs() {
 
         if (faqRef.current) { faqSectionObserver.observe(faqRef.current); }
 
-        return () => {
+        return () => {//eslint-disable-next-line
             if (faqRef.current) { faqSectionObserver.unobserve(faqRef.current); }
         };
     }, []);
@@ -30,7 +30,7 @@ export default function FAQs() {
         );
         if (lastQuestionRef.current) { lastQuestionObserver.observe(lastQuestionRef.current); }
 
-        return () => {
+        return () => {//eslint-disable-next-line
             if (lastQuestionRef.current) { lastQuestionObserver.unobserve(lastQuestionRef.current); }
         };
     }, []);
