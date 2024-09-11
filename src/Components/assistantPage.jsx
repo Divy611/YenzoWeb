@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 export default function AssistantPage() {
     const tabs = [
         { label: 'Search', content: <Search />, icon: <i className="fa-solid fa-magnifying-glass text-xl text-green-500"></i> },
-        { label: 'Simulations', content: <></>, icon: <i className="fa-solid fa-store text-xl text-green-500"></i> },
+        { label: 'Simulations', content: <Simulations />, icon: <i className="fa-solid fa-store text-xl text-green-500"></i> },
         { label: 'Saved', content: <></>, icon: <i className="fa-regular fa-folder-open text-xl text-green-500"></i> },
         { label: 'Settings', content: <></>, icon: <i className="fa-solid fa-gear text-xl text-green-500"></i> },
     ];
@@ -67,5 +67,11 @@ const Search = () => {
                 </div>
             </div>
         </div>
+    )
+}
+
+const Simulations = () => {
+    return (
+        <></>
     )
 }

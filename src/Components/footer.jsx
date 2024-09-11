@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom/cjs/react-router-dom'
 
 export default function Footer() {
     return (
-        <footer className='justify-between'>
+        <footer className='w-full justify-between'>
             <div className="container px-5 py-12 mx-auto text-lg flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
                 <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-end">
                     <Link to="/" className="flex title-font font-medium items-center md:justify-start justify-center"><img src={Logo} className='w-1/2' alt="" /></Link>

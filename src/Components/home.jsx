@@ -1,4 +1,5 @@
 import React from "react";
+import FAQs from "./faqs";
 import { Globe } from "./shapes";
 import HomeSnap from "../assets/Home.png";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -10,6 +11,7 @@ export default function Home() {
             <AssistantSection />
             <Stats />
             <Features />
+            <FAQs />
             <EmailInput />
         </>
     )

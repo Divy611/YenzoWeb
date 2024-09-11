@@ -1,7 +1,19 @@
 import React from 'react'
+import FAQs from './faqs'
+import { EmailInput } from './home'
 import { motion } from 'framer-motion'
 
 export default function Pricing() {
+    return (
+        <>
+            <PricingSection />
+            <FAQs />
+            <EmailInput />
+        </>
+    )
+}
+
+function PricingSection() {
     return (
         <section className="overflow-hidden">
             <div className="container px-5 py-24 mx-auto">
