@@ -9,7 +9,7 @@ export default function Contact() {
         <>
             <div className="flex-col py-8">
                 <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="flex mt-6 justify-center items-center">
-                    <div className="w-16 h-1 rounded-full bg-green-500"></div><span className='text-green-500 px-3'>Contact Us</span><div className="w-16 h-1 rounded-full bg-green-500"></div>
+                    <div className="w-16 h-1 rounded-full bg-green-600"></div><span className='text-green-600 px-3'>Contact Us</span><div className="w-16 h-1 rounded-full bg-green-600"></div>
                 </motion.div>
                 <motion.h1 initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.15 }} className="text-6xl text-white font-semibold text-center">Send Us a Message</motion.h1>
             </div>

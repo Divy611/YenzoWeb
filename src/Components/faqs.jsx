@@ -48,9 +48,9 @@ export default function FAQs() {
                 <div className="p-10 flex justify-between">
                     <div className="w-1/2 py-24 flex-col text-start sticky top-0 self-start">
                         <motion.div initial={{ opacity: 0, x: 25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.35 }} className="flex mt-6 justify-start items-center">
-                            <div className="w-16 h-1 rounded-full bg-green-500"></div>
-                            <span className="text-green-500 px-3">FAQs</span>
-                            <div className="w-16 h-1 rounded-full bg-green-500"></div>
+                            <div className="w-16 h-1 rounded-full bg-green-600"></div>
+                            <span className="text-green-600 px-3">FAQs</span>
+                            <div className="w-16 h-1 rounded-full bg-green-600"></div>
                         </motion.div>
                         <motion.h1 initial={{ opacity: 0, x: 25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.35, delay: 0.15 }} className="text-white text-5xl font-semibold">Common Questions</motion.h1>
                     </div>

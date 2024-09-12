@@ -25,11 +25,11 @@ const HeroSection = () => {
         <motion.div className="mx-auto py-5" style={{ translateY: parallax, perspective: 1750 }} >
             <div className="items-center lg:flex">
                 <div className="w-1/2 px-10">
-                    <div className="w-1/4 py-1 border border-green-500 rounded-xl">
-                        <h1 className="px-2.5 text-green-500 capitalize text-lg">Coming soon</h1>
-                    </div>
-                    <h1 className="py-3 font-bold text-white xl:text-6xl sm:text-3xl"><span className='text-green-500'>ORATO.</span><br /> YOUR AI SPEECH COACH</h1>
-                    <p className="mt-3 text-gray-300 text-xl">Mastering Communication,<br /> One word at a time...</p>
+                    <motion.div initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="w-1/4 py-1 border border-green-600 rounded-xl">
+                        <h1 className="px-2.5 text-green-600 capitalize text-lg">Coming soon</h1>
+                    </motion.div>
+                    <motion.h1 initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="py-3 font-bold text-white xl:text-6xl sm:text-3xl"><span className='text-green-500'>ORATO.</span><br /> YOUR AI SPEECH COACH</motion.h1>
+                    <motion.p initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="mt-3 text-gray-300 text-xl">Mastering Communication,<br /> One word at a time...</motion.p>
                 </div>
                 <div className="flex items-center justify-center mt-6 lg:mt-0 w-1/2 globe" style={{ overflowX: "hidden" }}>
                     <Globe />
@@ -52,7 +52,7 @@ const AssistantSection = () => {
                     <motion.h1 initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.15 }} className="title-font text-6xl mb-4 font-semibold text-white">Improve your Oratory Skils</motion.h1>
                     <motion.p initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35 }} className="mb-8 leading-relaxed text-gray-200 text-lg">Practice your speaking skills in private,<br /> without any embarrassment.</motion.p>
                     <motion.div initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.45 }} className="flex justify-center">
-                        <a href='/login'><button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Log In</button></a>
+                        <a href='/login'><button className="inline-flex text-white bg-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Log In</button></a>
                         <Link to='/'><button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Log In</button></Link>
                     </motion.div>
                 </div>
@@ -73,7 +73,7 @@ export const Stats = () => {
                         </div>
                     </motion.div>
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.15 }} className="w-1/3 p-5">
-                        <div className="h-[85vh] bg-green-500 rounded-xl justify-between flex-col">
+                        <div className="h-[85vh] bg-green-600 rounded-xl justify-between flex-col">
                             <h1 className="px-5 py-16 font-bold text-5xl">91%</h1>
                             <h1 className="px-5 pt-48 font-semibold text-3xl">Employers cite communication as a critical skill for job success.</h1>
                         </div>
@@ -125,9 +125,9 @@ export const EmailInput = () => {
                     <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.35 }} className="flex w-full justify-center items-center">
                         <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4 md:w-full text-left">
                             <label for="hero-field" className="leading-7 text-sm text-gray-600"></label>
-                            <input type="text" id="hero-field" name="hero-field" placeholder="Enter your email here" className="w-full bg-opacity-50 rounded focus:ring-2 focus:ring-green-200 focus:bg-transparent border border-gray-300 focus:border-green-500 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+                            <input type="text" id="hero-field" name="hero-field" placeholder="Enter your email here" className="w-full bg-opacity-50 rounded focus:ring-2 focus:ring-green-200 focus:bg-transparent border border-gray-300 focus:border-green-600 text-base outline-none text-gray-700 py-2 px-3 leading-8 transition-colors duration-200 ease-in-out" />
                         </div>
-                        <button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Button</button>
+                        <button className="inline-flex text-white bg-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Button</button>
                     </motion.div>
                 </div>
             </div>

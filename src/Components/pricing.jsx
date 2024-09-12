@@ -19,12 +19,12 @@ function PricingSection() {
             <div className="container px-5 py-24 mx-auto">
                 <div className="flex flex-col text-center w-full mb-20">
                     <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="flex mt-6 justify-center items-center">
-                        <div className="w-16 h-1 rounded-full bg-green-500"></div><span className='text-green-500 px-3'>Pricing</span><div className="w-16 h-1 rounded-full bg-green-500"></div>
+                        <div className="w-16 h-1 rounded-full bg-green-600"></div><span className='text-green-600 px-3'>Pricing</span><div className="w-16 h-1 rounded-full bg-green-600"></div>
                     </motion.div>
                     <motion.h1 initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.15 }} className="text-5xl font-medium title-font mb-2 text-white">Pricing plans for teams of all sizes</motion.h1>
                     <motion.p initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.35 }} className="lg:w-2/3 mx-auto leading-relaxed text-base text-gray-500">Get started for free. No credit card needed.</motion.p>
-                    <div className="flex mx-auto border-2 border-green-500 rounded overflow-hidden mt-6">
-                        <button className="py-1 px-4 bg-green-500 text-white focus:outline-none">Monthly</button>
+                    <div className="flex mx-auto border-2 border-green-600 rounded overflow-hidden mt-6">
+                        <button className="py-1 px-4 bg-green-600 text-white focus:outline-none">Monthly</button>
                         <button className="py-1 px-4 focus:outline-none text-white">Annually</button>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ const PricingTile = ({ tierName, price, feature1, feature2, feature3, feature4, 
     const features = [feature1, feature2, feature3, feature4, feature5];
     return (
         <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: delay }} className="p-4 xl:w-1/3 md:w-1/2 w-full">
-            <div className="h-full p-6 rounded-lg border border-gray-300 flex flex-col relative overflow-hidden">
+            <div className="h-full p-6 rounded-xl border border-gray-300 flex flex-col relative overflow-hidden">
                 <h2 className="text-sm tracking-widest title-font mb-1 font-medium text-white">{tierName}</h2>
                 {typeof price === 'string' ? (
                     <h1 className="text-5xl text-white leading-none font-semibold flex items-center py-2 pb-4 mb-4 border-b border-gray-200"><span>{price}</span></h1>
@@ -66,7 +66,7 @@ const PricingTile = ({ tierName, price, feature1, feature2, feature3, feature4, 
                     </p>
                 ))}
                 <div className="py-2 mt-auto">
-                    <button className="flex items-center mt-auto text-white bg-green-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-green-800 rounded">Pay Now!
+                    <button className="flex items-center mt-auto text-white bg-green-600 border-0 py-2 px-4 w-full focus:outline-none hover:bg-green-800 rounded">Pay Now!
                         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-4 h-4 ml-auto" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
                     </button>
                 </div>
