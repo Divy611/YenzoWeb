@@ -40,10 +40,10 @@ export default function Header() {
 
 
 export function AltHeader() {
-    const CustomLink = ({ child }) => {
+    const CustomLink = ({ child, path }) => {
         return (
             <button className="border border-green-500 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-500">
-                <Link to="/chat" className="transition-colors duration-300 transform">{child}</Link>
+                <Link to={path} className="transition-colors duration-300 transform">{child}</Link>
             </button>
         )
     }
@@ -53,7 +53,7 @@ export function AltHeader() {
         <header className="px-6 py-8 mx-auto bg-[#0E0D12]">
             <div className="lg:flex lg:items-center">
                 <div className="flex items-center justify-between">
-                    <Link to="/"><img className="w-auto h-6 sm:h-7" src={Logo1} alt="" /></Link>
+                    <a href="/"><img className="w-auto h-6 sm:h-7" src={Logo1} alt="" /></a>
                     <div className="flex lg:hidden">
                         <button onClick={toggleMenu} type="button" className="text-gray-500 hover:text-white focus:outline-none focus:text-white" aria-label="toggle menu">
                             {!isOpen ? (
@@ -65,7 +65,7 @@ export function AltHeader() {
                     </div>
                 </div>
 
-                <div className={`${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'} absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between`} style={{ backgroundColor: "#0E0D12" }}>
+                <div className={`${isOpen ? 'translate-x-0 opacity-100' : 'opacity-0 -translate-x-full'} absolute inset-x-0 z-20 flex-1 w-full px-6 py-4 transition-all duration-300 ease-in-out lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center lg:justify-between bg-[#0E0D12]`}>
                     <div className="flex flex-col text-white capitalize lg:flex lg:px-16 lg:-mx-4 lg:flex-row lg:items-center">
                         <Link to="#" className="mt-2 transition-colors duration-300 transform lg:mt-0 lg:mx-4">
                             <button className="flex items-center text-green-500 border border-green-600 p-2 rounded-lg text-xs"><i className="fa-solid fa-plus"></i><h1 className="ml-2">New Chat</h1></button>
@@ -76,9 +76,13 @@ export function AltHeader() {
                     </div>
 
                     <div className="flex justify-center mt-6 lg:flex lg:mt-0 lg:-mx-2">
-                        <CustomLink child={<i className="fa-regular fa-bookmark"></i>} />
-                        <CustomLink child={<i className="fa-solid fa-layer-group"></i>} />
-                        <CustomLink child={<i className="fa-regular fa-share-from-square"></i>} />
+                        {/* <CustomLink path={"/pricing"} child={} /> */}
+                        <button className="border border-green-500 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-500">
+                            <a href="/pricing" className="transition-colors duration-300 transform"><h1>Upgrade</h1></a>
+                        </button>
+                        <CustomLink path={"/chat"} child={<i className="fa-regular fa-bookmark"></i>} />
+                        <CustomLink path={"/chat"} child={<i className="fa-solid fa-layer-group"></i>} />
+                        <CustomLink path={"/chat"} child={<i className="fa-regular fa-share-from-square"></i>} />
                     </div>
                 </div>
             </div>
@@ -91,7 +95,7 @@ export function AuthHeader() {
         <header className="px-6 py-8 mx-auto bg-[#16151A]">
             <div className="lg:flex lg:items-center">
                 <div className="flex items-center justify-between">
-                    <Link to="/"><img className="w-auto h-6 sm:h-7" src={Logo1} alt="" /></Link>
+                    <a href="/"><img className="w-auto h-6 sm:h-7" src={Logo1} alt="" /></a>
                 </div>
             </div>
         </header>

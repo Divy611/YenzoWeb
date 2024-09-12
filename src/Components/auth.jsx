@@ -32,7 +32,7 @@ const AuthFields = ({ title }) => {
                 <button className='bg-[#1B1A1D] text-center rounded-lg w-full py-4 px-5 text-gray-300 flex items-center'><img src='https://w7.pngwing.com/pngs/326/85/png-transparent-google-logo-google-text-trademark-logo-thumbnail.png' alt='' className='h-8 w-8' />&nbsp;&nbsp;&nbsp;Continue with Google</button>
             </div>
             <div className='w-1/3 py-7'><div className="w-full h-0.5 rounded-full bg-green-500"></div></div>
-            <h1 className='text-white'>Don't have an account? <Link to="/chat" className='text-green-500'>Sign Up Today!</Link></h1>
+            <h1 className='text-white'>Don't have an account? <a href="/chat" className='text-green-500'>Sign Up Today!</a></h1>
         </div>
     )
 }

@@ -52,7 +52,7 @@ const AssistantSection = () => {
                     <motion.h1 initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.15 }} className="title-font text-6xl mb-4 font-semibold text-white">Improve your Oratory Skils</motion.h1>
                     <motion.p initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35 }} className="mb-8 leading-relaxed text-gray-200 text-lg">Practice your speaking skills in private,<br /> without any embarrassment.</motion.p>
                     <motion.div initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.45 }} className="flex justify-center">
-                        <Link to='/login'><button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Log In</button></Link>
+                        <a href='/login'><button className="inline-flex text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Log In</button></a>
                         <Link to='/'><button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Log In</button></Link>
                     </motion.div>
                 </div>

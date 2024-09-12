@@ -28,7 +28,6 @@ const VerticalTabs = ({ tabs }) => {
                         </div>
                     ))}
                 </div>
-
                 {/* {isExpanded && (
                     <div className={`p-2 transition-all duration-300 ease-in-out transform-gpu ${isExpanded ? 'opacity-100 translate-y-0 max-h-full' : 'opacity-0 translate-y-2 max-h-0 overflow-hidden'}`}>
                         <div className="bg-[#1F35C3] rounded-xl text-center p-2">
@@ -40,7 +39,6 @@ const VerticalTabs = ({ tabs }) => {
                         </div>
                     </div>
                 )} */}
-
                 <div className="flex items-center bg-gray-800 p-2 h-1/6 rounded-xl rounded-b-none">
                     <img className="h-10 w-10 rounded-full" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
                     {isExpanded && (
@@ -113,12 +111,14 @@ const Simulations = () => {
 }
 const Saved = () => {
     return (
-        <></>
+        <section className="container px-5 py-12 mx-auto bg-[#16151A] h-[84vh] 2xl:h-[91vh] overflow-y-auto">
+        </section>
     )
 }
 
 const Settings = () => {
     return (
-        <></>
+        <section className="container px-5 py-12 mx-auto bg-[#16151A] h-[84vh] 2xl:h-[91vh] overflow-y-auto">
+        </section>
     )
 }
