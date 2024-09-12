@@ -32,7 +32,7 @@ body {
 
 .vertical-tabs .tab-list {
     width: 18.5%;
-    transition: width 0.3s ease;
+    transition: width 0.7s ease;
 }
 
 @media only screen and (max-width: 1020px) {

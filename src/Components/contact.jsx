@@ -53,36 +53,34 @@ export default function Contact() {
     )
 }
 
-export const ContactForm = () => {
+const ContactForm = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [formData, setFormData] = useState({ name: '', user_email: '', phone: '', message: '' });
+    const [formData, setFormData] = useState({
+        name: '',
+        user_email: '',
+        phone: '',
+        message: ''
+    });
     const form = useRef();
     const sendEmail = (e) => {
         e.preventDefault();
         emailjs.sendForm('service_plkdmbx', 'template_ligaasq', form.current, '4o5KQ0dBHH07s3YcY')
             .then((result) => {
-                setFormData({ name: '', user_email: '', phone: '', message: '' });
+                setFormData({
+                    name: '',
+                    user_email: '',
+                    phone: '',
+                    message: ''
+                });
                 setIsSubmitted(true);
             }, (error) => { });
-    };
-    const handleClosePopup = () => {
-        setIsSubmitted(false);
-    };
-    const SuccessPopup = ({ onClose }) => {
-        return (
-            <div className="success-popup">
-                <h2>Submitted Successfully!!</h2>
-                <p>Your form has been submitted successfully.</p>
-                <button onClick={onClose}>Close</button>
-            </div>
-        );
     };
     return (
         <motion.form ref={form} onSubmit={sendEmail} initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="w-full p-12 my-4 md:px-12 lg:w-9/12 lg:pl-20 lg:pr-40 mr-auto border border-green-600 rounded-2xl shadow-xl shadow-green-600">
             <input required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline" type="text" placeholder="Full Name" />
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2 mt-5">
                 <input required value={formData.user_email} onChange={(e) => setFormData({ ...formData, user_email: e.target.value })} className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline" type="email" placeholder="Email" />
-                <input value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline" type="phone" placeholder="Phone" />
+                <input value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="w-full bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline" type="tel" placeholder="Phone" />
             </div>
             <div className="my-4">
                 <textarea placeholder="Message" value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} className="w-full h-32 bg-gray-100 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"></textarea>
@@ -90,7 +88,6 @@ export const ContactForm = () => {
             <div className="my-2 w-full">
                 <button type='submit' value="Send" className="uppercase text-sm font-bold tracking-wide bg-green-600 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline">Send Message</button>
             </div>
-            {isSubmitted && <SuccessPopup onClose={handleClosePopup} />}
         </motion.form>
     );
 }

@@ -42,9 +42,9 @@ export default function Header() {
 export function AltHeader() {
     const CustomLink = ({ child }) => {
         return (
-            <div className="border border-green-500 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-500">
-                <Link className="transition-colors duration-300 transform">{child}</Link>
-            </div>
+            <button className="border border-green-500 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-500">
+                <Link to="/chat" className="transition-colors duration-300 transform">{child}</Link>
+            </button>
         )
     }
     const [isOpen, setIsOpen] = useState(false);

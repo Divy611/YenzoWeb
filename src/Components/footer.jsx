@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom/cjs/react-router-dom'
 export default function Footer() {
     return (
         <footer className='w-full justify-between'>
-            <div className="container px-5 py-12 mx-auto text-lg flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
+            <div className="px-6 py-12 mx-auto text-lg flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
                 <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-end">
                     <Link to="/" className="flex title-font font-medium items-center md:justify-start justify-center"><img src={Logo} className='w-1/2' alt="" /></Link>
                 </div>
@@ -17,7 +17,7 @@ export default function Footer() {
                 </div>
             </div>
             <div className="w-full">
-                <div className="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col justify-between">
+                <div className="px-6 py-8 mx-auto flex items-center sm:flex-row flex-col justify-between">
                     <p className="text-sm text-gray-300 sm:py-2 sm:mt-0 mt-4">Copyright © 2024 Orato</p>
                     <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
                         <Link to="" className="text-gray-500 hover:text-white">

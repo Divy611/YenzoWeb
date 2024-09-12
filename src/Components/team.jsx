@@ -1,6 +1,6 @@
 import React from 'react'
 import Divy from "../assets/Me.jpg"
-import Aditya from "../assets/Aditya.jpeg"
+import Aditya from "../assets/Aditya.jpg"
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function Team() {
