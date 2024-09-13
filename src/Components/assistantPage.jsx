@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AudioRecorder } from './audioRecorder';
 //import NoTextLogo from "../assets/logo_no_title.png";
 
 export default function AssistantPage() {
@@ -24,7 +25,7 @@ const VerticalTabs = ({ tabs }) => {
             <div className={`bg-[#0E0D12] text-white flex flex-col transition-all duration-500 ease-in-out ${isExpanded ? 'w-1/6' : 'w-16'}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <div className="flex-1 overflow-y-auto">
                     {tabs.map((tab, index) => (
-                        <div key={index} className={`tab-item flex items-center py-4 px-3 cursor-pointer hover:bg-gray-700 transition-colors ${index === activeTab ? 'text-green-600 font-semibold' : 'text-white'}`} onClick={() => handleClick(index)}>
+                        <div key={index} className={`tab-item flex items-center py-3.5 px-3 cursor-pointer hover:bg-gray-700 transition-colors ${index === activeTab ? 'text-green-600 font-semibold' : 'text-white'}`} onClick={() => handleClick(index)}>
                             <span className='tab-icon'>{tab.icon}</span>
                             {isExpanded && <span className="ml-3 tab-text">{tab.label}</span>}
                         </div>
@@ -57,22 +58,45 @@ const VerticalTabs = ({ tabs }) => {
 };
 
 const Search = () => {
+    const TypingText = ({ text, speed }) => {
+        const [displayedText, setDisplayedText] = useState('');
+
+        useEffect(() => {
+            let currentIndex = 0;
+            const intervalId = setInterval(() => {
+                setDisplayedText((prev) => prev + text[currentIndex]);
+                currentIndex++;
+                if (currentIndex === text.length) {
+                    clearInterval(intervalId);
+                }
+            }, speed);
+
+            return () => clearInterval(intervalId);
+        }, [text, speed]);
+
+        return <span>{displayedText}</span>;
+    };
     return (
-        <div className="h-[85vh] 2xl:h-[91vh] flex flex-col justify-between items-center">
+        <div className="h-[84.5vh] 2xl:h-[91vh] flex flex-col justify-between items-center">
             <div className=""></div>
-            <div className="w-1/2 h-1/3 2xl:h-1/5 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="w-1/2 h-1/3 2xl:h-1/5 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
                 <div className="px-4 py-5 items-center justify-center">
-                    <h1 className="text-white text-md">Hi, User!</h1>
-                    <p className="text-white py-1 text-sm">It's great to have you here. To kick off our session, I'd love to hear all about you. Tell me about your background, your interests, and anything else you'd like to share. Feel free to include your hobbies, preferences, and what drives you.</p>
+                    <h1 className="text-white text-md">
+                        <TypingText text="Hi, User!" speed={10} />
+                    </h1>
+                    <p className="text-white py-1 text-sm">
+                        <TypingText text="It's great to have you here. To kick off our session, I'd love to hear all about you. Tell me about your background, your interests, and anything else you'd like to share. Feel free to include your hobbies, preferences, and what drives you." speed={15} />
+                    </p>
                 </div>
-            </div>
+            </motion.div>
             <div className="w-full h-1/6 bg-[#151418] border-t border-green-600">
                 <div className="flex w-6/7 justify-center items-center px-10 py-4">
                     {/* <button className='items-end justify-end'>
                         <img src={NoTextLogo} alt="" className='w-1/6 object-center object-fit border border-green-600 rounded-full' />
                     </button> */}
-                    <div className="relative mr-4 w-full text-left flex items-center border border-green-600 rounded-xl">
-                        <button className="text-green-600 px-4 py-3"><i className="fa-solid fa-microphone text-xl"></i></button>
+                    <div className="relative mr-4 w-full text-left flex items-center rounded-xl">
+                        {/* <button className="text-green-600 px-4 py-3"><i className="fa-solid fa-microphone text-xl"></i></button> */}
+                        <AudioRecorder />
                         <div className="w-full bg-transparent bg-opacity-50 focus:bg-transparent text-base outline-none text-green-100 p-3 leading-8 transition-colors duration-200 ease-in-out"></div>
                         <button className="text-green-600 px-4 py-3"><i className="fa-solid fa-circle-chevron-right text-2xl"></i></button>
                     </div>

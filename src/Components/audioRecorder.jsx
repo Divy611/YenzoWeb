@@ -66,13 +66,15 @@ export const AudioRecorder = () => {
     };
 
     return (
-        <div style={{ padding: '1rem' }}>
-            <button className={`border-2 border-green-600`} onClick={isRecording ? stopRecording : startRecording} style={{ color: 'white', padding: '0.5rem 1rem', borderRadius: '0.25rem', cursor: 'pointer' }}></button>
+        <div className='flex'>
+            <button className={`border-2 border-green-600 w-12`} onClick={isRecording ? stopRecording : startRecording} style={{ color: 'white', borderRadius: '0.25rem', cursor: 'pointer' }}>
+                {isRecording ? <i class="fa-solid fa-stop text-green-600 py-3"></i> : <i class="fa-solid fa-play text-green-600 py-3"></i>}
+            </button>
             {recordingError && (
                 <div style={{ backgroundColor: '#fecaca', color: '#dc2626', borderRadius: '0.25rem' }}>{recordingError}</div>
             )}
             {isRecording && (
-                <div>
+                <div className='w-6/6 bg-white'>
                     <div style={{ backgroundColor: '#e5e7eb', height: '1rem', borderRadius: '9999px', overflow: 'hidden' }}>
                         <div style={{ backgroundColor: '#22c55e', height: '100%', width: `${Math.min(100, volume)}%`, transition: 'width 100ms ease-in-out' }}></div>
                     </div>
