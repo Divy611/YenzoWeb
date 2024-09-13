@@ -17,11 +17,13 @@ body {
 
 .tab-list {
     display: flex;
+    align-items: center;
     flex-direction: column;
 }
 
 .tab-item {
     cursor: pointer;
+    align-items: center;
     transition: background-color 0.3s ease;
 }
 
@@ -51,7 +53,7 @@ body {
     display: flex;
     align-items: start;
     justify-content: start;
-    transition: background-color 0.25s ease;
+    transition: background-color 0.35s ease;
 }
 
 .vertical-tabs .tab-icon {

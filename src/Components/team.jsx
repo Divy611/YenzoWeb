@@ -16,7 +16,7 @@ export default function Team() {
                         <p>(Co Founder, CEO)</p>
                         <a className="ml-3" href='https://www.linkedin.com/in/pandeyaditya03/'><i className="fa-brands fa-linkedin"></i></a>
                         <span>&nbsp;&#x2022;&nbsp;</span>
-                        <a href='mailto:pandeyaditya1003@gmail.com'>pandeyaditya1003@gmail.com</a>
+                        <a href='mailto:pandey.aditya1003@gmail.com'>pandey.aditya1003@gmail.com</a>
                     </div>
                     <h2 className="py-5 leading-relaxed text-gray-200">I believe in the power of technology to transform lives, and I'm on a mission to be at the forefront of that transformation.</h2>
                 </div>

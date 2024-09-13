@@ -26,9 +26,9 @@ const HeroSection = () => {
             <div className="items-center lg:flex">
                 <div className="w-1/2 px-10">
                     <motion.div initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="w-1/4 py-1 border border-green-600 rounded-xl">
-                        <h1 className="px-2.5 text-green-600 capitalize text-lg">Coming soon</h1>
+                        <h1 className="px-1.5 text-gray-300 capitalize text-lg">Coming soon...</h1>
                     </motion.div>
-                    <motion.h1 initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="py-3 font-bold text-white xl:text-6xl sm:text-3xl"><span className='text-green-500'>ORATO.</span><br /> YOUR AI SPEECH COACH</motion.h1>
+                    <motion.h1 initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="py-3 font-bold text-white xl:text-6xl sm:text-3xl tracking-wide"><span className='text-green-500'>ORATO.</span><br /> YOUR AI SPEECH COACH</motion.h1>
                     <motion.p initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="mt-3 text-gray-300 text-xl">Mastering Communication,<br /> One word at a time...</motion.p>
                 </div>
                 <div className="flex items-center justify-center mt-6 lg:mt-0 w-1/2 globe" style={{ overflowX: "hidden" }}>

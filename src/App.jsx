@@ -8,6 +8,7 @@ import Pricing from './Components/pricing';
 import Contact from './Components/contact';
 import Login, { Signup } from './Components/auth';
 import AssistantPage from './Components/assistantPage';
+import { AudioRecorder } from './Components/audioRecorder';
 import Header, { AltHeader, AuthHeader } from './Components/header';
 import { BrowserRouter as Router, Switch, useLocation, Route } from 'react-router-dom/cjs/react-router-dom.min';
 
@@ -47,6 +48,7 @@ function AppContent() {
         <Route exact path="/signup" render={() => { return (<Signup />) }}></Route>
         <Route exact path="/contact" render={() => { return (<Contact />) }}></Route>
         <Route exact path="/pricing" render={() => { return (<Pricing />) }}></Route>
+        <Route exact path="/record" render={() => { return (<AudioRecorder />) }}></Route>
         <Route exact path="/chat" render={() => { return (<AssistantPage />) }}></Route>
       </Switch>
       {shouldShowAuthHeader() ? <></> : location.pathname === '/chat' || location.pathname === '/login' ? <></> : <Footer />}

@@ -8,16 +8,16 @@ export function Signup() { return (<AuthFields title={"SIGNUP"} />) }
 const AuthFields = ({ title }) => {
     return (
         <div className="py-10 2xl:py-56 flex flex-col items-center text-center bg-[#16151A]">
-            <img src={NoTextLogo} className='h-20 w-20' alt="" />
-            <div className="flex-col py-2"><h1 className='text-white text-3xl font-semibold'>{title}</h1><h2 className='text-gray-500'>Welcome Back!</h2></div>
+            <img src={NoTextLogo} className='h-16 w-16' alt="" />
+            <div className="flex-col py-2"><h1 className='text-white text-2xl font-semibold'>{title}</h1><h2 className='text-gray-500'>Welcome Back!</h2></div>
             <div className='w-1/3 px-3 py-5'>
                 <div className="border border-green-600 rounded-lg">
-                    <input required type="email" placeholder='Email' className='w-full bg-transparent p-4 rounded-lg text-lg text-white' />
+                    <input required type="email" placeholder='Email' className='w-full bg-transparent p-4 rounded-lg text-md text-white' />
                 </div>
             </div>
             <div className='w-1/3 px-3'>
                 <div className="border border-green-600 rounded-lg">
-                    <input required type="password" placeholder='Password' className='w-full bg-transparent p-4 rounded-lg text-lg text-white' />
+                    <input required type="password" placeholder='Password' className='w-full bg-transparent p-4 rounded-lg text-md text-white' />
                 </div>
             </div>
             <div className='w-1/3 px-3 py-5'>
