@@ -47,7 +47,7 @@ const AssistantSection = () => {
         <motion.section className="px-10 py-24 mx-auto parallax-element" style={{ transform: parallaxTranslateBottom, scale: parallaxScaleBottom }}>
             <div className="container mx-auto flex px-5 items-center justify-center flex-col">
                 {/* <Laptop imageUrl={HomeSnap} /> */}
-                <motion.img initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-4/6 mb-10 object-cover object-center rounded-2xl" alt="" src={HomeSnap} />
+                <motion.img initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-4/6 mb-10 object-cover object-center rounded-2xl shadow-lg shadow-green-500" alt="" src={HomeSnap} />
                 <div className="text-center lg:w-2/3 w-full py-7">
                     <motion.h1 initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.15 }} className="title-font text-6xl mb-4 font-semibold text-white">Improve your Oratory Skils</motion.h1>
                     <motion.p initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35 }} className="mb-8 leading-relaxed text-gray-200 text-lg">Practice your speaking skills in private,<br /> without any embarrassment.</motion.p>
@@ -93,8 +93,8 @@ export const Stats = () => {
 export const FeatureTile = ({ title, subtitle, delay }) => {
     return (
         <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: delay }} className="p-4 md:w-1/3 flex flex-col text-center items-center flex-grow">
-            <h2 className="text-white text-3xl font-extrabold mb-3">{title}</h2>
-            <p className="leading-relaxed text-base text-gray-200">{subtitle}</p>
+            <h2 className="text-white text-2xl font-extrabold mb-3">{title}</h2>
+            <p className="text-gray-200 text-md">{subtitle}</p>
         </motion.div>
     )
 }

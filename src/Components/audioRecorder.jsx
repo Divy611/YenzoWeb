@@ -68,7 +68,7 @@ export const AudioRecorder = () => {
     return (
         <div className='flex'>
             <button className={`border-2 border-green-600 w-12`} onClick={isRecording ? stopRecording : startRecording} style={{ color: 'white', borderRadius: '0.25rem', cursor: 'pointer' }}>
-                {isRecording ? <i class="fa-solid fa-stop text-green-600 py-3"></i> : <i class="fa-solid fa-play text-green-600 py-3"></i>}
+                {isRecording ? <i class="fa-solid fa-stop text-green-600 py-3"></i> : <i class="fa-solid fa-microphone text-green-600 py-3"></i>}
             </button>
             {recordingError && (
                 <div style={{ backgroundColor: '#fecaca', color: '#dc2626', borderRadius: '0.25rem' }}>{recordingError}</div>

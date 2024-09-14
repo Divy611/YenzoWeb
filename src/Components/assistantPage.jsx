@@ -31,7 +31,7 @@ const VerticalTabs = ({ tabs }) => {
                         </div>
                     ))}
                 </div>
-                {isExpanded && (
+                {/* {isExpanded && (
                     <div className={`p-2 transition-all duration-300 ease-in-out transform-gpu ${isExpanded ? 'opacity-100 translate-y-0 max-h-full' : 'opacity-0 translate-y-2 max-h-0 overflow-hidden'}`}>
                         <div className="bg-[#1F35C3] rounded-xl text-center p-2">
                             <h1 className="text-sm text-white">Upgrade your&nbsp;
@@ -41,7 +41,7 @@ const VerticalTabs = ({ tabs }) => {
                             <button className="rounded-full p-2 text-white border border-white text-sm mt-3">View all Plans</button>
                         </div>
                     </div>
-                )}
+                )} */}
                 <div className="flex items-center bg-gray-800 p-2 h-1/6 rounded-xl rounded-b-none">
                     <img className="h-10 w-10 rounded-full" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
                     {isExpanded && (
@@ -77,7 +77,7 @@ const Search = () => {
         return <span>{displayedText}</span>;
     };
     return (
-        <div className="h-[84.5vh] 2xl:h-[91vh] flex flex-col justify-between items-center">
+        <div className="container h-[84.5vh] 2xl:h-[91vh] flex flex-col justify-between items-center">
             <div className=""></div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="w-1/2 h-1/3 2xl:h-1/5 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
                 <div className="px-4 py-5 items-center justify-center">
