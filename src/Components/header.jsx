@@ -77,7 +77,7 @@ export function AltHeader() {
 
                     <div className="flex justify-center mt-6 lg:flex lg:mt-0 lg:-mx-2">
                         {/* <CustomLink path={"/pricing"} child={} /> */}
-                        <button className="border border-green-600 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-600">
+                        <button className="border border-green-600 px-3 py-1 rounded items-center justify-center text-center h-full mx-2 text-green-600 hover:bg-green-600 hover:text-white">
                             <a href="/pricing" className="transition-colors duration-300 transform"><h1>Upgrade</h1></a>
                         </button>
                         <CustomLink path={"/chat"} child={<i className="fa-regular fa-bookmark"></i>} />

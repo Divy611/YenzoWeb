@@ -2,7 +2,6 @@ import React from 'react'
 import NoTextLogo from "../assets/logo_no_title.png"
 
 export default function Login() { return (<AuthFields title={"LOGIN"} />) }
-
 export function Signup() { return (<AuthFields title={"SIGNUP"} />) }
 
 const AuthFields = ({ title }) => {

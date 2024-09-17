@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { AudioRecorder } from './audioRecorder';
-//import NoTextLogo from "../assets/logo_no_title.png";
 
 export default function AssistantPage() {
     const tabs = [
@@ -31,25 +30,9 @@ const VerticalTabs = ({ tabs }) => {
                         </div>
                     ))}
                 </div>
-                {/* {isExpanded && (
-                    <div className={`p-2 transition-all duration-300 ease-in-out transform-gpu ${isExpanded ? 'opacity-100 translate-y-0 max-h-full' : 'opacity-0 translate-y-2 max-h-0 overflow-hidden'}`}>
-                        <div className="bg-[#1F35C3] rounded-xl text-center p-2">
-                            <h1 className="text-sm text-white">Upgrade your&nbsp;
-                                <span className="bg-yellow-300 py-1 px-2 rounded text-black font-semibold">Plan</span>
-                            </h1>
-                            <p className="text-xs text-white mt-2">Unlock lightning-fast responses and unleash your creativity.</p>
-                            <button className="rounded-full p-2 text-white border border-white text-sm mt-3">View all Plans</button>
-                        </div>
-                    </div>
-                )} */}
                 <div className="flex items-center bg-gray-800 p-2 h-1/6 rounded-xl rounded-b-none">
                     <img className="h-10 w-10 rounded-full" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
-                    {isExpanded && (
-                        <div className="ml-2">
-                            <h1 className="text-sm">Divy Parikh</h1>
-                            <h2 className="text-xs">email@example.com</h2>
-                        </div>
-                    )}
+                    {isExpanded && (<div className="ml-2"><h1 className="text-sm">Divy Parikh</h1><h2 className="text-xs">email@example.com</h2></div>)}
                 </div>
             </div>
             <div className="flex-grow overflow-y-auto bg-[#16151A]">{tabs[activeTab].content}</div>
@@ -58,48 +41,22 @@ const VerticalTabs = ({ tabs }) => {
 };
 
 const Search = () => {
-    const TypingText = ({ text, speed }) => {
-        const [displayedText, setDisplayedText] = useState('');
-
-        useEffect(() => {
-            let currentIndex = 0;
-            const intervalId = setInterval(() => {
-                setDisplayedText((prev) => prev + text[currentIndex]);
-                currentIndex++;
-                if (currentIndex === text.length) {
-                    clearInterval(intervalId);
-                }
-            }, speed);
-
-            return () => clearInterval(intervalId);
-        }, [text, speed]);
-
-        return <span>{displayedText}</span>;
-    };
     return (
-        <div className="container h-[84.5vh] 2xl:h-[91vh] flex flex-col justify-between items-center">
+        <div className="h-[84.5vh] 2xl:h-[91vh] flex flex-col justify-between items-center overflow-y-hidden">
             <div className=""></div>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="w-1/2 h-1/3 2xl:h-1/5 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
                 <div className="px-4 py-5 items-center justify-center">
-                    <h1 className="text-white text-md">
-                        <TypingText text="Hi, User!" speed={10} />
-                    </h1>
-                    <p className="text-white py-1 text-sm">
-                        <TypingText text="It's great to have you here. To kick off our session, I'd love to hear all about you. Tell me about your background, your interests, and anything else you'd like to share. Feel free to include your hobbies, preferences, and what drives you." speed={15} />
-                    </p>
+                    <h1 className="text-white text-md">Hi, User!</h1>
+                    <p className="text-white py-1 text-sm">It's great to have you here. To kick off our session, I'd love to hear all about you. Tell me about your background, your interests, and anything else you'd like to share. Feel free to include your hobbies, preferences, and what drives you.</p>
                 </div>
             </motion.div>
             <div className="w-full h-1/6 bg-[#151418] border-t border-green-600">
-                <div className="flex w-6/7 justify-center items-center px-10 py-4">
-                    {/* <button className='items-end justify-end'>
-                        <img src={NoTextLogo} alt="" className='w-1/6 object-center object-fit border border-green-600 rounded-full' />
-                    </button> */}
-                    <div className="relative mr-4 w-full text-left flex items-center rounded-xl">
-                        {/* <button className="text-green-600 px-4 py-3"><i className="fa-solid fa-microphone text-xl"></i></button> */}
-                        <AudioRecorder />
+                <div className="flex justify-center items-center px-10 py-4">
+                    <AudioRecorder />
+                    {/* <div className="relative mr-4 w-full text-left flex items-center rounded-xl">
                         <div className="w-full bg-transparent bg-opacity-50 focus:bg-transparent text-base outline-none text-green-100 p-3 leading-8 transition-colors duration-200 ease-in-out"></div>
                         <button className="text-green-600 px-4 py-3"><i className="fa-solid fa-circle-chevron-right text-2xl"></i></button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
@@ -112,9 +69,7 @@ const Simulations = () => {
             <div className="lg:w-1/2 sm:w-1/2 px-16 py-10 relative">
                 <div className="flex relative items-center justify-center">
                     <motion.img src={imageUrl} className="inset-0 w-full h-full object-cover object-center rounded-2xl" style={{ filter: 'blur(2.25px)' }} alt='' initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: delay }} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <p className="text-white text-4xl font-bold">{text}</p>
-                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center"><p className="text-white text-4xl font-bold">{text}</p></div>
                 </div>
             </div>
         )
