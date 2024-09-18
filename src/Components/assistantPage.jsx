@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
-import { AudioRecorder } from './audioRecorder';
+import { HomeScreen } from './audioRecorder';
 
 export default function AssistantPage() {
     const tabs = [
-        { label: 'New Chat', content: <NewChat />, icon: <i className="fa-solid fa-microphone text-xl text-green-600"></i> },
+        { label: 'Home', content: <HomeScreen />, icon: <i className="fa-solid fa-home text-xl text-green-600"></i> },
         { label: 'Simulations', content: <Simulations />, icon: <i className="fa-solid fa-store text-xl text-green-600"></i> },
         { label: 'Saved', content: <Saved />, icon: <i className="fa-regular fa-folder-open text-xl text-green-600"></i> },
-        { label: 'Challenges', content: <Saved />, icon: <i class="fa-solid fa-dumbbell text-xl text-green-600"></i> },
+        { label: 'Challenges', content: <Challenges />, icon: <i class="fa-solid fa-dumbbell text-xl text-green-600"></i> },
         { label: 'Settings', content: <Settings />, icon: <i className="fa-solid fa-gear text-xl text-green-600"></i> },
     ];
     return <VerticalTabs tabs={tabs} />;
@@ -40,22 +40,11 @@ const VerticalTabs = ({ tabs }) => {
     );
 };
 
-const NewChat = () => {
-    return (
-        <div className="h-[84.5vh] 2xl:h-[91vh] flex flex-col justify-between items-center overflow-y-hidden">
-            <div className=""></div>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="w-1/2 h-1/3 2xl:h-1/5 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
-                <div className="px-4 py-5 items-center justify-center">
-                    <h1 className="text-white text-md">Hi, User!</h1>
-                    <p className="text-white py-1 text-sm">It's great to have you here. To kick off our session, I'd love to hear all about you. Tell me about your background, your interests, and anything else you'd like to share. Feel free to include your hobbies, preferences, and what drives you.</p>
-                </div>
-            </motion.div>
-            <div className="w-full h-1/6 bg-[#151418] border-t border-green-600">
-                <div className="flex justify-center items-center px-10 py-4"><AudioRecorder /></div>
-            </div>
-        </div>
-    )
-}
+// const HomeScreen = () => {
+//     return (
+
+//     )
+// }
 
 const Simulations = () => {
     const SimulationTile = ({ imageUrl, text, delay }) => {
@@ -71,7 +60,7 @@ const Simulations = () => {
 
     return (
         <>
-            <section className="py-12 mx-auto bg-[#16151A] h-[85vh] 2xl:h-[91vh] overflow-y-auto">
+            <section className="py-12 mx-auto bg-[#16151A] h-[85vh] 2xl:h-[91vh] overflow-y-auto overflow-x-hidden">
                 <div className="flex flex-col text-center w-full mb-20">
                     <motion.h1 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-5xl font-semibold title-font mb-4 text-white">Simulations</motion.h1>
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25 }} className="lg:w-2/3 text-sm mx-auto leading-relaxed text-white">Choose from a variety of situations to simulate.</motion.p>
@@ -88,13 +77,13 @@ const Simulations = () => {
     )
 }
 const Saved = () => {
-    return (
-        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[85vh] 2xl:h-[91vh] overflow-y-auto"></section>
-    )
+    return (<section className="px-5 py-12 mx-auto bg-[#16151A] h-[85vh] 2xl:h-[91vh] overflow-y-auto"></section>)
+}
+
+const Challenges = () => {
+    return (<section className="px-5 py-12 mx-auto bg-[#16151A] h-[85vh] 2xl:h-[91vh] overflow-y-auto"></section>)
 }
 
 const Settings = () => {
-    return (
-        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[84vh] 2xl:h-[91vh] overflow-y-auto"></section>
-    )
+    return (<section className="px-5 py-12 mx-auto bg-[#16151A] h-[84vh] 2xl:h-[91vh] overflow-y-auto"></section>)
 }
