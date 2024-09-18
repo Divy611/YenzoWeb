@@ -4,7 +4,7 @@ import { AudioRecorder } from './audioRecorder';
 
 export default function AssistantPage() {
     const tabs = [
-        { label: 'Search', content: <Search />, icon: <i className="fa-solid fa-magnifying-glass text-xl text-green-600"></i> },
+        { label: 'New Chat', content: <NewChat />, icon: <i className="fa-solid fa-microphone text-xl text-green-600"></i> },
         { label: 'Simulations', content: <Simulations />, icon: <i className="fa-solid fa-store text-xl text-green-600"></i> },
         { label: 'Saved', content: <Saved />, icon: <i className="fa-regular fa-folder-open text-xl text-green-600"></i> },
         { label: 'Challenges', content: <Saved />, icon: <i class="fa-solid fa-dumbbell text-xl text-green-600"></i> },
@@ -40,7 +40,7 @@ const VerticalTabs = ({ tabs }) => {
     );
 };
 
-const Search = () => {
+const NewChat = () => {
     return (
         <div className="h-[84.5vh] 2xl:h-[91vh] flex flex-col justify-between items-center overflow-y-hidden">
             <div className=""></div>
@@ -51,13 +51,7 @@ const Search = () => {
                 </div>
             </motion.div>
             <div className="w-full h-1/6 bg-[#151418] border-t border-green-600">
-                <div className="flex justify-center items-center px-10 py-4">
-                    <AudioRecorder />
-                    {/* <div className="relative mr-4 w-full text-left flex items-center rounded-xl">
-                        <div className="w-full bg-transparent bg-opacity-50 focus:bg-transparent text-base outline-none text-green-100 p-3 leading-8 transition-colors duration-200 ease-in-out"></div>
-                        <button className="text-green-600 px-4 py-3"><i className="fa-solid fa-circle-chevron-right text-2xl"></i></button>
-                    </div> */}
-                </div>
+                <div className="flex justify-center items-center px-10 py-4"><AudioRecorder /></div>
             </div>
         </div>
     )
@@ -95,14 +89,12 @@ const Simulations = () => {
 }
 const Saved = () => {
     return (
-        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[85vh] 2xl:h-[91vh] overflow-y-auto">
-        </section>
+        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[85vh] 2xl:h-[91vh] overflow-y-auto"></section>
     )
 }
 
 const Settings = () => {
     return (
-        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[84vh] 2xl:h-[91vh] overflow-y-auto">
-        </section>
+        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[84vh] 2xl:h-[91vh] overflow-y-auto"></section>
     )
 }

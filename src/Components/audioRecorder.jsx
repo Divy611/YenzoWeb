@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react'
 
 export const AudioRecorder = () => {
     const [isRecording, setIsRecording] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
     const [recordingError, setRecordingError] = useState(null);
     const [audioUrl, setAudioUrl] = useState(null);
     const mediaRecorderRef = useRef(null);
@@ -14,7 +13,6 @@ export const AudioRecorder = () => {
     const streamRef = useRef(null);
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
-    const audioRef = useRef(null);
 
     useEffect(() => {
         return () => { stopMicrophone(); cancelAnimationFrame(animationRef.current); };
@@ -62,37 +60,6 @@ export const AudioRecorder = () => {
         if (streamRef.current) { streamRef.current.getTracks().forEach(track => track.stop()); }
         if (sourceRef.current) { sourceRef.current.disconnect(); }
     };
-
-    // const playRecording = () => {
-    //     if (audioUrl) {
-    //         audioRef.current = new Audio(audioUrl);
-    //         audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-    //         analyserRef.current = audioContextRef.current.createAnalyser();
-    //         analyserRef.current.fftSize = 256;
-    //         sourceRef.current = audioContextRef.current.createMediaElementSource(audioRef.current);
-    //         sourceRef.current.connect(analyserRef.current);
-    //         analyserRef.current.connect(audioContextRef.current.destination);
-
-    //         audioRef.current.onended = () => {
-    //             setIsPlaying(false);
-    //             cancelAnimationFrame(animationRef.current);
-    //         };
-
-    //         audioRef.current.play();
-    //         setIsPlaying(true);
-    //         drawEqualizer();
-    //     }
-    // };
-
-    // const stopPlayback = () => {
-    //     if (audioRef.current) {
-    //         audioRef.current.pause();
-    //         audioRef.current.currentTime = 0;
-    //     }
-    //     setIsPlaying(false);
-    //     cancelAnimationFrame(animationRef.current);
-    // };
-
     const drawEqualizer = () => {
         const canvas = canvasRef.current;
         const canvasCtx = canvas.getContext('2d');
@@ -147,44 +114,16 @@ export const AudioRecorder = () => {
         draw();
     };
 
-    // const drawEqualizer = () => {
-    //     const canvas = canvasRef.current;
-    //     const canvasCtx = canvas.getContext('2d');
-    //     const WIDTH = canvas.width;
-    //     const HEIGHT = canvas.height;
-    //     const bufferLength = analyserRef.current.frequencyBinCount;
-    //     const dataArray = new Uint8Array(bufferLength);
-
-    //     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-    //     const draw = () => {
-    //         animationRef.current = requestAnimationFrame(draw);
-    //         analyserRef.current.getByteFrequencyData(dataArray);
-
-    //         canvasCtx.fillStyle = 'rgb(0, 0, 0)';
-    //         canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-
-    //         const barWidth = (WIDTH / bufferLength) * 2.5;
-    //         let barHeight;
-    //         let x = 0;
-
-    //         for (let i = 0; i < bufferLength; i++) {
-    //             barHeight = dataArray[i] / 2;
-
-    //             const r = barHeight + (25 * (i / bufferLength));
-    //             const g = 250 * (i / bufferLength);
-    //             const b = 50;
-
-    //             canvasCtx.fillStyle = `rgb(${r},${g},${b})`;
-    //             canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-
-    //             x += barWidth + 1;
-    //         }
-    //     };
-
-    //     draw();
-    // };
-
+    const MotionDots = () => {
+        return (
+            <div className="pulsating-dots">
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+            </div>
+        )
+    }
 
     return (
         <div className="flex justify-center items-center relative">
@@ -192,37 +131,5 @@ export const AudioRecorder = () => {
                 {isRecording ? (<MotionDots />) : (<img className="p-2.5" src={NoTextLogo} />)}
             </button>
         </div>
-        // <div className="flex justify-center items-center">
-        //     <button className={`border-2 rounded-full border-green-600 w-16 h-16 flex items-center justify-center transition-transform duration-500 ease-in-out ${isRecording ? 'animate-pulse scale-110' : ''}`} onClick={isRecording ? stopRecording : startRecording} style={{ background: '#151418', color: 'white', cursor: 'pointer', boxShadow: '0px 0px 15px rgba(0, 255, 0, 0.5)', }}>
-        //         {isRecording ? (
-        //             <i className="fa-solid fa-stop text-green-600"></i>
-        //         ) : (
-        //             <i className="fa-solid fa-microphone text-green-600"></i>
-        //         )}
-        //     </button>
-        // </div>
-        // <div className='p-2 flex overflow-y-hidden'>
-        //     <button className={`border-2 rounded-lg border-green-600 w-12`} onClick={isRecording ? stopRecording : startRecording} style={{ color: 'white', cursor: 'pointer' }}>
-        //         {isRecording ? <i class="fa-solid fa-stop text-green-600 py-3"></i> : <i class="fa-solid fa-microphone text-green-600 py-3"></i>}
-        //     </button>
-        //     {/* {audioUrl && !isRecording && (
-        //         <button className='ml-2 rounded-lg h-full' onClick={isPlaying ? stopPlayback : playRecording} style={{ backgroundColor: isPlaying ? '#ef4444' : '#10b981', color: 'white', fontWeight: 'bold', padding: '0.5rem 1rem', border: 'none', cursor: 'pointer' }}>
-        //             {isPlaying ? 'Stop Playback' : 'Play Recording'}
-        //         </button>
-        //     )}
-        //     {recordingError && (<div className='p-1 ml-2 rounded-lg bg-pink-200'>{recordingError}</div>)} */}
-        //     <canvas className='ml-2' style={{ display: (isRecording || isPlaying) ? 'block' : 'none' }} ref={canvasRef} />
-        // </div>
     );
 };
-
-export const MotionDots = () => {
-    return (
-        <div className="pulsating-dots">
-            <div className="dot"></div>
-            <div className="dot"></div>
-            <div className="dot"></div>
-            <div className="dot"></div>
-        </div>
-    )
-}
