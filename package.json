@@ -12,7 +12,9 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
+    "standardized-audio-context": "^25.3.77",
     "three": "^0.168.0",
+    "tone": "^15.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
