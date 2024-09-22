@@ -6,6 +6,7 @@ import About from './Components/about';
 import Footer from './Components/footer';
 import Pricing from './Components/pricing';
 import Contact from './Components/contact';
+import PageNotFound from './Components/404';
 import Login, { Signup } from './Components/auth';
 import AssistantPage from './Components/assistantPage';
 import Header, { AuthHeader } from './Components/header';
@@ -47,6 +48,7 @@ function AppContent() {
         <Route exact path="/pricing" render={() => { return (<Pricing />) }}></Route>
         <Route exact path="/home" render={() => { return (<AssistantPage />) }}></Route>
         <Route exact path="/new-session" render={() => { return (<RecorderScreen />) }}></Route>
+        <Route component={PageNotFound} />
       </Switch>
       {shouldShowAuthHeader() ? <></> : location.pathname === '/home' || location.pathname === '/login' ? <></> : <Footer />}
     </Router >
