@@ -8,7 +8,8 @@ import Pricing from './Components/pricing';
 import Contact from './Components/contact';
 import Login, { Signup } from './Components/auth';
 import AssistantPage from './Components/assistantPage';
-import Header, { AltHeader, AuthHeader } from './Components/header';
+import Header, { AuthHeader } from './Components/header';
+import { RecorderScreen } from './Components/audioRecorder';
 import { BrowserRouter as Router, Switch, useLocation, Route } from 'react-router-dom/cjs/react-router-dom.min';
 
 const ScrollToTop = () => {
@@ -24,17 +25,18 @@ function App() {
 function AppContent() {
   const location = useLocation();
   //const [authStatus, setAuthStatus] = useState(AuthStatus.NOT_DETERMINED);
-  const hideHeaderPaths = ['/chat', '/login', '/login-admin', '/signup', '/404'];
+  const hideHeaderPaths = ['/home', '/login', '/login-admin', '/signup', '/404', 'new-session'];
 
   const shouldShowAuthHeader = () => {
+    if (location.pathname === '/home') { return <></>; }
+    if (location.pathname === '/new-session') { return <></>; }
     if (location.pathname === '/login' || location.pathname === '/signup') { return <AuthHeader />; }
-    if (location.pathname === '/chat') { return false; }
     return hideHeaderPaths.includes(location.pathname);
   };
   return (
     <Router>
       <ScrollToTop />
-      {shouldShowAuthHeader() ? (shouldShowAuthHeader()) : location.pathname === '/chat' ? (<AltHeader />) : (<Header />)}
+      {shouldShowAuthHeader() ? (shouldShowAuthHeader()) : location.pathname === '/home' ? (<></>) : (<Header />)}
       <Switch>
         <Route exact path="/" render={() => { return (<Home />) }}></Route>
         <Route exact path="/team" render={() => { return (<Team />) }}></Route>
@@ -43,9 +45,10 @@ function AppContent() {
         <Route exact path="/signup" render={() => { return (<Signup />) }}></Route>
         <Route exact path="/contact" render={() => { return (<Contact />) }}></Route>
         <Route exact path="/pricing" render={() => { return (<Pricing />) }}></Route>
-        <Route exact path="/chat" render={() => { return (<AssistantPage />) }}></Route>
+        <Route exact path="/home" render={() => { return (<AssistantPage />) }}></Route>
+        <Route exact path="/new-session" render={() => { return (<RecorderScreen />) }}></Route>
       </Switch>
-      {shouldShowAuthHeader() ? <></> : location.pathname === '/chat' || location.pathname === '/login' ? <></> : <Footer />}
+      {shouldShowAuthHeader() ? <></> : location.pathname === '/home' || location.pathname === '/login' ? <></> : <Footer />}
     </Router >
   );
 }

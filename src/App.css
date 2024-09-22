@@ -9,10 +9,13 @@ body {
 }
 
 .vertical-tabs {
-    height: 100%;
     display: flex;
-    position: relative;
+    height: 100vh;
     flex-direction: row;
+}
+
+.tabList {
+    justify-content: space-between;
 }
 
 .tab-list {
@@ -23,6 +26,7 @@ body {
 
 .tab-item {
     cursor: pointer;
+    display: flex;
     align-items: center;
     transition: background-color 0.3s ease;
 }
