@@ -183,6 +183,19 @@ export const RecorderScreen = () => {
     }
     const history = useHistory();
     const backToHome = () => { history.goBack(); }
+    const [typedText, setTypedText] = useState('');
+    const fullText = `It's great to have you here. To kick off our session, I'd love to hear all about you. Tell me about your background, your interests, and anything else you'd like to share. Feel free to include your hobbies, preferences, and what drives you.`;
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        if (index < fullText.length) {
+            const timeout = setTimeout(() => {
+                setTypedText(prev => prev + fullText[index]);
+                setIndex(index + 1);
+            }, 20);
+            return () => clearTimeout(timeout);
+        }
+    }, [index, fullText]);
     return (
         <div className={`flex flex-col h-[100vh] justify-between items-center overflow-y-hidden bg-[#151418]`}>
             <header className='p-6 w-full'>
@@ -195,9 +208,9 @@ export const RecorderScreen = () => {
                     ? isRecording
                         ? <canvas ref={canvasRef} className="w-1/2 bg-[#16151A] rounded-lg" />
                         : <div className="w-1/2 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
-                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="px-4 py-5 items-center text-center">
+                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="px-4 py-5 items-center text-center">
                                 <h1 className="text-white text-md">Hi, User!</h1>
-                                <p className="text-white py-1 text-sm">It's great to have you here. To kick off our session, I'd love to hear all about you. Tell me about your background, your interests, and anything else you'd like to share. Feel free to include your hobbies, preferences, and what drives you.</p>
+                                <p className="text-white py-1 text-sm">{typedText}</p>
                             </motion.div>
                         </div>
                     : null

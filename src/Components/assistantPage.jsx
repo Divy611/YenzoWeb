@@ -60,7 +60,7 @@ const HomeScreen = () => {
     ];
     const AgendaList = () => {
         return (
-            <div className="w-full h-1/2 2xl:h-1/3 bg-[#151418] rounded-xl shadow-md shadow-gray-600">
+            <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="w-full h-1/2 2xl:h-1/3 bg-[#151418] rounded-xl shadow-md shadow-gray-600">
                 <div className="p-3.5 h-full justify-center">
                     <div className="px-2 h-full bg-white rounded-lg flex flex-col overflow-y-auto text-start">
                         {agendas.map((agenda, index) => (
@@ -71,23 +71,23 @@ const HomeScreen = () => {
                         ))}
                     </div>
                 </div>
-            </div>
+            </motion.div>
         )
     }
     return (
         <section className="container px-5 py-32 mx-auto bg-[#16151A] h-[100vh] items-center justify-center text-center overflow-y-auto">
             <div className="mx-auto flex px-5 h-full 2xl:h-3/4 2xl:py-12 w-1/2 flex flex-col justify-between items-center">
                 <div>
-                    <motion.h1 className="title-font text-3xl mb-4 font-medium text-white">Hi User! Welcome to Orato</motion.h1>
-                    <p className="mb-5 2xl:mb-0 leading-relaxed text-green-500">What's on your agenda today?</p>
+                    <motion.h1 initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="title-font text-3xl mb-4 font-medium text-white">Hi User! Welcome to Orato</motion.h1>
+                    <motion.p initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="mb-5 2xl:mb-0 leading-relaxed text-green-500">What's on your agenda today?</motion.p>
                 </div>
                 <AgendaList />
-                <a href='/new-session' className='py-5 2xl:py-1'>
+                <motion.a initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} href='/new-session' className='py-5 2xl:py-1'>
                     <button className="flex items-center text-white bg-gray-800 border-0 p-3 focus:outline-none hover:bg-gray-900 rounded-xl text-lg">
                         <i className="fa-solid fa-microphone text-xl text-green-600"></i>
                         <h1 className='ml-3 text-sm'>Start a New Session</h1>
                     </button>
-                </a>
+                </motion.a>
             </div>
         </section >
     )
