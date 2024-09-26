@@ -54,19 +54,22 @@ const VerticalTabs = ({ tabs }) => {
 
 const HomeScreen = () => {
     const agendas = [
-        { heading: "Watch a quick tutorial video", isComplete: true },
-        { heading: "Practice a mock interview", isComplete: false },
-        { heading: "Check out your speech summary", isComplete: false },
+        { heading: "Watch a quick tutorial video", isComplete: true, points: 5 },
+        { heading: "Practice a mock interview", isComplete: false, points: 5 },
+        { heading: "Check out your speech summary", isComplete: false, points: 5 },
     ];
     const AgendaList = () => {
         return (
             <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="w-full h-1/2 2xl:h-1/3 bg-[#151418] rounded-xl shadow-md shadow-gray-600">
                 <div className="p-3.5 h-full justify-center">
-                    <div className="px-2 h-full bg-white rounded-lg flex flex-col overflow-y-auto text-start">
+                    <div className="px-2 h-full rounded-lg flex flex-col overflow-y-auto text-start">
                         {agendas.map((agenda, index) => (
-                            <div key={index} className='py-5 border-b-2 border-gray-300 flex items-center'>
-                                <input type="checkbox" className={`appearance-none w-4 h-4 border border-gray-500 rounded-full checked:bg-green-600 focus:outline-none ${agenda.isComplete ? 'bg-green-600' : ''}`} />
-                                <h1 className={`ml-2.5 text-black ${agenda.isComplete ? "line-through" : ""}`}>{agenda.heading}</h1>
+                            <div key={index} className='py-5 border-b border-gray-300 flex items-center justify-between'>
+                                <div className="flex items-center">
+                                    <input type="checkbox" className={`appearance-none w-4 h-4 border border-gray-500 rounded-full checked:bg-green-600 focus:outline-none ${agenda.isComplete ? 'bg-green-600' : ''}`} />
+                                    <h1 className={`ml-2.5 text-white ${agenda.isComplete ? "line-through" : ""}`}>{agenda.heading}</h1>
+                                </div>
+                                <h2 className={`text-green-600 ${agenda.isComplete ? "line-through" : ""}`}>+{agenda.points} points</h2>
                             </div>
                         ))}
                     </div>

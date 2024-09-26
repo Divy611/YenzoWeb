@@ -11,7 +11,7 @@ export default function PageNotFound() {
                 <div className="w-1/2 px-10">
                     <motion.h1 initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="px-1.5 text-green-500 capitalize text-lg">404</motion.h1>
                     <motion.h1 initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="py-3 font-bold text-white xl:text-6xl sm:text-3xl tracking-wide">Page not found</motion.h1>
-                    <motion.p initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="mt-3 text-gray-300 text-xl">Sorry, the page you are looking for doesn't exist.Here are some helpful links:</motion.p>
+                    <motion.p initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="mt-3 text-gray-300 text-xl">Sorry, the page you are looking for doesn't exist. Here are some helpful links:</motion.p>
                     <div className="px-5 flex items-center mt-6 gap-x-3">
                         <button onClick={() => { history.goBack(); }} className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto hover:bg-gray-100">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-5 h-5 rtl:rotate-180">
