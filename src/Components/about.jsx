@@ -1,6 +1,11 @@
 import React from 'react'
+import About1 from '../assets/about1.png'
+import About2 from '../assets/about2.png'
+import About3 from '../assets/about3.png'
+import About4 from '../assets/about4.png'
+import About5 from '../assets/about5.png'
 import { Stats, FeatureTile, EmailInput } from './home'
-import { useScroll, useTransform, motion } from 'framer-motion';
+import { useScroll, useTransform, motion } from 'framer-motion'
 
 export default function About() {
     return (
@@ -26,23 +31,15 @@ const MainSection = () => {
                     </div>
                     <div className="lg:max-w-lg lg:w-full md:w-1/2 w-5/6 flex items-center">
                         <div className="w-1/3">
-                            <img className='h-48 rounded-lg' src="https://images.pexels.com/photos/5990058/pexels-photo-5990058.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
+                            <img className='h-48 rounded-lg' src={About1} alt="" />
                         </div>
                         <div className="w-1/3 flex-col items-center justify-between h-full">
-                            <div className='py-2'>
-                                <img className='h-48 rounded-lg' src="https://images.pexels.com/photos/5324858/pexels-photo-5324858.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
-                            </div>
-                            <div className='py-2'>
-                                <img className='h-48 rounded-lg' src="https://images.pexels.com/photos/8937594/pexels-photo-8937594.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
-                            </div>
+                            <div className='py-2'><img className='h-48 rounded-lg' src={About2} alt="" /></div>
+                            <div className='py-2'><img className='h-48 rounded-lg' src={About3} alt="" /></div>
                         </div>
                         <div className="w-1/3 flex-col items-center justify-between h-full">
-                            <div className='py-10'>
-                                <img className='h-48 rounded-lg' src="https://images.pexels.com/photos/8937612/pexels-photo-8937612.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
-                            </div>
-                            <div className='py-10'>
-                                <img className='h-48 rounded-lg' src="https://images.pexels.com/photos/5990058/pexels-photo-5990058.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" />
-                            </div>
+                            <div className='py-10'><img className='h-48 rounded-lg' src={About4} alt="" /></div>
+                            <div className='py-10'><img className='h-48 rounded-lg' src={About5} alt="" /></div>
                         </div>
                     </div>
                 </div>

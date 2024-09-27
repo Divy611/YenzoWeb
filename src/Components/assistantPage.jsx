@@ -1,7 +1,12 @@
-import { motion } from 'framer-motion';
-import React, { useState } from 'react';
-import LogoFull from '../assets/logo1.png';
-import Logo from '../assets/logo_no_title.png';
+import { motion } from 'framer-motion'
+import Sim1 from '../assets/sim1.jpeg'
+import Sim2 from '../assets/sim2.jpeg'
+import Sim3 from '../assets/sim3.jpeg'
+import Sim4 from '../assets/sim4.jpeg'
+import Sim5 from '../assets/sim5.jpeg'
+import React, { useState } from 'react'
+import LogoFull from '../assets/logo1.png'
+import Logo from '../assets/logo_no_title.png'
 
 export default function AssistantPage() {
     const tabs = [
@@ -45,9 +50,7 @@ const VerticalTabs = ({ tabs }) => {
                     )}
                 </div>
             </div>
-            <div className="flex-grow overflow-y-auto bg-[#16151A]">
-                {tabs[activeTab].content}
-            </div>
+            <div className="flex-grow overflow-y-auto bg-[#16151A]">{tabs[activeTab].content}</div>
         </div>
     );
 };
@@ -116,11 +119,11 @@ const Simulations = () => {
                     <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25 }} className="lg:w-2/3 text-sm mx-auto leading-relaxed text-white">Choose from a variety of situations to simulate.</motion.p>
                 </div>
                 <div className="flex flex-wrap -m-4">
-                    <SimulationTile imageUrl={"https://images.pexels.com/photos/7979439/pexels-photo-7979439.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} text={"Interviews"} delay={0} />
-                    <SimulationTile imageUrl={"https://images.pexels.com/photos/5990037/pexels-photo-5990037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} text={"Meetings"} delay={0.15} />
-                    <SimulationTile imageUrl={"https://images.pexels.com/photos/7255270/pexels-photo-7255270.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} text={"Presentations"} delay={0.25} />
-                    <SimulationTile imageUrl={"https://images.pexels.com/photos/7245808/pexels-photo-7245808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} text={"Sales"} delay={0.35} />
-                    <SimulationTile imageUrl={"https://images.pexels.com/photos/1049317/pexels-photo-1049317.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} text={"General Communication"} delay={0.45} />
+                    <SimulationTile imageUrl={Sim1} text={"Interviews"} delay={0} />
+                    <SimulationTile imageUrl={Sim2} text={"Meetings"} delay={0.15} />
+                    <SimulationTile imageUrl={Sim3} text={"Presentations"} delay={0.25} />
+                    <SimulationTile imageUrl={Sim4} text={"Sales"} delay={0.35} />
+                    <SimulationTile imageUrl={Sim5} text={"General Communication"} delay={0.45} />
                 </div>
             </section>
         </>

@@ -2,7 +2,6 @@ import React from "react";
 import FAQs from "./faqs";
 import { Globe } from "./shapes";
 import HomeSnap from "../assets/Home.png";
-import { Link } from "react-router-dom/cjs/react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export default function Home() {
@@ -53,7 +52,7 @@ const AssistantSection = () => {
                     <motion.p initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35 }} className="mb-8 leading-relaxed text-gray-200 text-lg">Practice your speaking skills in private,<br /> without any embarrassment.</motion.p>
                     <motion.div initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.45 }} className="flex justify-center">
                         <a href='/login'><button className="inline-flex text-white bg-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Log In</button></a>
-                        <Link to='/'><button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Log In</button></Link>
+                        <a href='/signup'><button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Sign Up</button></a>
                     </motion.div>
                 </div>
             </div>
