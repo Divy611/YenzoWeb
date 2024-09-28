@@ -1,8 +1,9 @@
-import React from "react";
-import FAQs from "./faqs";
-import { Globe } from "./shapes";
-import HomeSnap from "../assets/Home.png";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React from 'react'
+import FAQs from './faqs'
+import { Globe } from './shapes'
+import HomeSnap from '../assets/Home.png'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 
 export default function Home() {
     return (
@@ -39,6 +40,7 @@ const HeroSection = () => {
 }
 
 const AssistantSection = () => {
+    const history = useHistory();
     let { scrollYProgress } = useScroll();
     let parallaxScaleBottom = useTransform(scrollYProgress, [0, 1], [1, 3]);
     let parallaxTranslateBottom = useTransform(scrollYProgress, [0, 3], ["150%", "50%"]);
@@ -51,8 +53,8 @@ const AssistantSection = () => {
                     <motion.h1 initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.15 }} className="title-font text-6xl mb-4 font-semibold text-white">Improve your Oratory Skils</motion.h1>
                     <motion.p initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.35 }} className="mb-8 leading-relaxed text-gray-200 text-lg">Practice your speaking skills in private,<br /> without any embarrassment.</motion.p>
                     <motion.div initial={{ opacity: 0, y: 35 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.45 }} className="flex justify-center">
-                        <a href='/login'><button className="inline-flex text-white bg-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Log In</button></a>
-                        <a href='/signup'><button className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Sign Up</button></a>
+                        <button onClick={() => { history.push('/login') }} className="inline-flex text-white bg-green-600 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg">Log In</button>
+                        <button onClick={() => { history.push('/signup') }} className="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Sign Up</button>
                     </motion.div>
                 </div>
             </div>

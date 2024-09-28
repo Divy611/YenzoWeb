@@ -55,8 +55,8 @@ const PricingTile = ({ tierName, price, feature1, feature2, feature3, feature4, 
                 )}
                 {features.map((feature, index) => (
                     <p key={index} className="flex items-center text-gray-200 text-lg py-1 mb-2">
-                        {feature ? (
-                            <>
+                        {feature
+                            ? (<>
                                 <span className="w-4 h-4 mr-2 inline-flex items-center justify-center bg-green-400 text-white rounded-full flex-shrink-0">
                                     <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" className="w-3 h-3" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"></path></svg>
                                 </span>

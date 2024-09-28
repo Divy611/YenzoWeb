@@ -15,9 +15,7 @@ export default function FAQs() {
             },
             { threshold: 0.1 }
         );
-
         if (faqRef.current) { faqSectionObserver.observe(faqRef.current); }
-
         return () => {//eslint-disable-next-line
             if (faqRef.current) { faqSectionObserver.unobserve(faqRef.current); }
         };
@@ -29,7 +27,6 @@ export default function FAQs() {
             { threshold: 1.0 }
         );
         if (lastQuestionRef.current) { lastQuestionObserver.observe(lastQuestionRef.current); }
-
         return () => {//eslint-disable-next-line
             if (lastQuestionRef.current) { lastQuestionObserver.unobserve(lastQuestionRef.current); }
         };

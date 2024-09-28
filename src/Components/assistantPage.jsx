@@ -7,6 +7,7 @@ import Sim5 from '../assets/sim5.jpeg'
 import React, { useState } from 'react'
 import LogoFull from '../assets/logo1.png'
 import Logo from '../assets/logo_no_title.png'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom'
 
 export default function AssistantPage() {
     const tabs = [
@@ -56,6 +57,7 @@ const VerticalTabs = ({ tabs }) => {
 };
 
 const HomeScreen = () => {
+    const history = useHistory();
     const agendas = [
         { heading: "Watch a quick tutorial video", isComplete: true, points: 5 },
         { heading: "Practice a mock interview", isComplete: false, points: 5 },
@@ -88,12 +90,10 @@ const HomeScreen = () => {
                     <motion.p initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="mb-5 2xl:mb-0 leading-relaxed text-green-500">What's on your agenda today?</motion.p>
                 </div>
                 <AgendaList />
-                <motion.a initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} href='/new-session' className='py-5 2xl:py-1'>
-                    <button className="flex items-center text-white bg-gray-800 border-0 p-3 focus:outline-none hover:bg-gray-900 rounded-xl text-lg">
-                        <i className="fa-solid fa-microphone text-xl text-green-600"></i>
-                        <h1 className='ml-3 text-sm'>Start a New Session</h1>
-                    </button>
-                </motion.a>
+                <motion.button onClick={() => { history.push('/new-session') }} initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.5 }} className="flex items-center text-white bg-gray-800 border-0 p-3 focus:outline-none hover:bg-gray-900 rounded-xl text-lg">
+                    <i className="fa-solid fa-microphone text-xl text-green-600"></i>
+                    <h1 className='ml-3 text-sm'>Start a New Session</h1>
+                </motion.button>
             </div>
         </section >
     )

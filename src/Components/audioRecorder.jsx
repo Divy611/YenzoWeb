@@ -8,6 +8,17 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const recordings = [];
 
+export const MotionDots = () => {
+    return (
+        <div className="pulsating-dots">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+        </div>
+    );
+};
+
 export const RecorderScreen = () => {
     const streamRef = useRef(null);
     const analyserRef = useRef(null);
@@ -118,17 +129,6 @@ export const RecorderScreen = () => {
         else { startRecording(); }
         setLoading(!loading);
         setIsRecording(!isRecording);
-    };
-
-    const MotionDots = () => {
-        return (
-            <div className="pulsating-dots">
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-            </div>
-        );
     };
     const Counter = ({ targetNumber }) => {
         const [count, setCount] = useState(0);

@@ -53,6 +53,5 @@ export default function WaveformVisualizer({ analyser }) {
         draw();
         return () => { cancelAnimationFrame(animationRef.current); };
     }, [analyser]);
-
     return <canvas ref={canvasRef} width="800" height="200" style={{ background: 'transparent' }} />;
 }
