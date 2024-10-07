@@ -1,4 +1,4 @@
-# Getting Started with Orato
+# Getting Started with Yenzo
 
 ## Available Scripts
 
@@ -39,7 +39,7 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 
 ## Learn More
 
-You can learn more in the [Orato documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+You can learn more in the [Yenzo documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 

@@ -1,9 +1,7 @@
-import Meyda from 'meyda';
 import { motion } from 'framer-motion'
 import * as tf from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-backend-webgl'
 import WaveformVisualizer from './waveform'
-//import * as PitchFinder from 'pitchfinder'
 import NoTextLogo from '../assets/logo_no_title.png'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
@@ -24,70 +22,85 @@ export const MotionDots = () => {
 export const RecorderScreen = () => {
     const streamRef = useRef(null);
     const sourceRef = useRef(null);
+    const analyserRef = useRef(null);
+    const animationRef = useRef(null);
     const processorRef = useRef(null);
-    const audioChunksRef = useRef([]);
     const audioContextRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(false);//eslint-disable-next-line
     const [audioUrl, setAudioUrl] = useState(null);
-    const [analyser, setAnalyser] = useState(null);
+    //const [analyser, setAnalyser] = useState(null);
     const [isRecording, setIsRecording] = useState(false);//eslint-disable-next-line
     const [recordingError, setRecordingError] = useState(null);
     useEffect(() => {
         return () => {
             stopRecording();
-            if (audioContextRef.current) {
-                audioContextRef.current.close();
-            }
+            if (audioContextRef.current) { audioContextRef.current.close(); }
+            if (animationRef.current) { cancelAnimationFrame(animationRef.current); }
         };
     }, []);
 
     const startRecording = async () => {
         try {
+            await tf.setBackend('webgl');
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
             audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
 
-            const analyserNode = audioContextRef.current.createAnalyser();
-            analyserNode.fftSize = 2048;
-            const source = audioContextRef.current.createMediaStreamSource(stream);
-            source.connect(analyserNode);
+            analyserRef.current = audioContextRef.current.createAnalyser();
+            analyserRef.current.fftSize = 2048;
+            sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
+            sourceRef.current.connect(analyserRef.current);
 
-            sourceRef.current = source;
-            setAnalyser(analyserNode);
             mediaRecorderRef.current = new MediaRecorder(stream);
+            mediaRecorderRef.current.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    const audioBlob = new Blob([event.data], { type: 'audio/wav' });
+                    const url = URL.createObjectURL(audioBlob);
+                    setAudioUrl(url);
+                }
+            };
             mediaRecorderRef.current.start();
+
             setIsRecording(true);
-        } catch (err) {
-            console.error('Error accessing microphone:', err);
-        }
+            setRecordingError(null);
+            analyzeAudioLoop();
+        } catch (err) { setRecordingError('Error accessing microphone.'); }
     };
 
     const stopRecording = () => {
         if (mediaRecorderRef.current && isRecording) {
             mediaRecorderRef.current.stop();
+            if (streamRef.current) { streamRef.current.getTracks().forEach(track => track.stop()); }
             if (audioContextRef.current) { audioContextRef.current.close(); }
+            if (animationRef.current) { cancelAnimationFrame(animationRef.current); }
             setIsRecording(false);
         }
     };
 
-    const setupTensorFlowAnalyzer = (stream) => {
-        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-        sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
-        const bufferSize = 2048;
-        processorRef.current = audioContextRef.current.createScriptProcessor(bufferSize, 1, 1);
-        sourceRef.current.connect(processorRef.current);
-        processorRef.current.connect(audioContextRef.current.destination);
+    const analyzeAudioLoop = () => {
+        if (!analyserRef.current) return;
 
-        processorRef.current.onaudioprocess = async (e) => {
-            const inputData = e.inputBuffer.getChannelData(0);
-            const tensorInput = tf.tensor1d(inputData);
-            const features = await extractFeatures(tensorInput);
+        const bufferLength = analyserRef.current.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        analyserRef.current.getByteFrequencyData(dataArray);
 
-            setMetrics(prevMetrics => ({ ...prevMetrics, ...features }));
-            tensorInput.dispose();
-        };
+        const tensorData = tf.tensor1d(dataArray);
+        const volume = tf.mean(tensorData);
+        const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tensorData.add(1e-6)));
+        const maxIndex = tf.argMax(tensorData);
+        const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
+        const [volumeValue, clarityValue, pitchValue] = [volume, clarity, estimatedPitch].map(t => t.dataSync()[0]);
+
+        setMetrics({
+            volume: Number(volumeValue.toFixed(2)),
+            clarity: Number(clarityValue.toFixed(2)),
+            pitch: Number(pitchValue.toFixed(2)),
+            confidence: 95
+        });
+        tf.dispose([tensorData, volume, clarity, maxIndex, estimatedPitch]);
+        animationRef.current = requestAnimationFrame(analyzeAudioLoop);
     };
 
     const extractFeatures = async (tensorInput) => {
@@ -115,6 +128,25 @@ export const RecorderScreen = () => {
         };
     };
 
+    //eslint-disable-next-line
+    const setupTensorFlowAnalyzer = (stream) => {
+        const bufferSize = 2048;
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
+        processorRef.current = audioContextRef.current.createScriptProcessor(bufferSize, 1, 1);
+        sourceRef.current.connect(processorRef.current);
+        processorRef.current.connect(audioContextRef.current.destination);
+
+        processorRef.current.onaudioprocess = async (e) => {
+            const inputData = e.inputBuffer.getChannelData(0);
+            const tensorInput = tf.tensor1d(inputData);
+            const features = await extractFeatures(tensorInput);
+            setMetrics(prevMetrics => ({ ...prevMetrics, ...features }));
+            tensorInput.dispose();
+        };
+    };
+
+    //eslint-disable-next-line
     const analyzeAudio = async (audioBlob) => {
         const arrayBuffer = await audioBlob.arrayBuffer();
         const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
@@ -171,15 +203,16 @@ export const RecorderScreen = () => {
             <div className="w-full flex flex-col justify-between items-center relative overflow-y-auto">
                 {recordings.length === 0 && !metrics
                     ? isRecording
-                        ? <WaveformVisualizer analyser={audioContextRef.current} />
+                        ? <WaveformVisualizer analyser={analyserRef.current} />
                         : <div className="w-1/3 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="px-4 py-5 items-center text-center">
                                 <h1 className="text-white text-md">Hi, User!</h1>
                                 <p className="text-white py-1 text-sm">{typedText}</p>
                             </motion.div>
-                        </div> : null
+                        </div>
+                    : null
                 }
-                {loading && (<WaveformVisualizer analyser={audioContextRef.current} />)}
+                {loading && (<WaveformVisualizer analyser={analyserRef.current} />)}
                 {!loading && metrics && (
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="w-1/2 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600 p-5 text-center">
                         <h1 className="pb-7 text-white text-lg">Analysis Results</h1>

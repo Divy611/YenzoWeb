@@ -53,7 +53,7 @@ export default function Contact() {
     )
 }
 
-const ContactForm = () => {
+const ContactForm = () => {//eslint-disable-next-line
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formData, setFormData] = useState({
         name: '',

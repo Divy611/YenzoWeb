@@ -18,7 +18,7 @@ export default function Footer() {
             </div>
             <div className="w-full">
                 <div className="px-6 py-8 mx-auto flex items-center sm:flex-row flex-col justify-between">
-                    <p className="text-sm text-gray-300 sm:py-2 sm:mt-0 mt-4">Copyright © 2024 Orato</p>
+                    <p className="text-sm text-gray-300 sm:py-2 sm:mt-0 mt-4">Copyright © 2024 Yenzo</p>
                     <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
                         <Link to="" className="text-gray-500 hover:text-white">
                             <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" className="w-5 h-5" viewBox="0 0 24 24">

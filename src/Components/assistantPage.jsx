@@ -86,7 +86,7 @@ const HomeScreen = () => {
         <section className="container px-5 py-32 mx-auto bg-[#16151A] h-[100vh] items-center justify-center text-center overflow-y-auto">
             <div className="mx-auto flex px-5 h-full 2xl:h-3/4 2xl:py-12 w-1/2 flex flex-col justify-between items-center">
                 <div>
-                    <motion.h1 initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="title-font text-3xl mb-4 font-medium text-white">Hi User! Welcome to Orato</motion.h1>
+                    <motion.h1 initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="title-font text-3xl mb-4 font-medium text-white">Hi User! Welcome to Yenzo</motion.h1>
                     <motion.p initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="mb-5 2xl:mb-0 leading-relaxed text-green-500">What's on your agenda today?</motion.p>
                 </div>
                 <AgendaList />
