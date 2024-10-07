@@ -30,7 +30,6 @@ export const RecorderScreen = () => {
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(false);//eslint-disable-next-line
     const [audioUrl, setAudioUrl] = useState(null);
-    //const [analyser, setAnalyser] = useState(null);
     const [isRecording, setIsRecording] = useState(false);//eslint-disable-next-line
     const [recordingError, setRecordingError] = useState(null);
     useEffect(() => {
