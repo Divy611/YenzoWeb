@@ -76,10 +76,10 @@ function AppContent({ authStatus, setAuthStatus }) {
         <Route exact path="/about" render={() => { return (<About />) }}></Route>
         <Route exact path="/pricing" render={() => { return (<Pricing />) }}></Route>
         <Route exact path="/contact" render={() => { return (<Contact />) }}></Route>
-        <Route exact path="/new-session" render={() => { return (<RecorderScreen />) }}></Route>
         <Route exact path="/login" render={() => { return (<Login setAuthStatus={setAuthStatus} />) }}></Route>
         <Route exact path="/signup" render={() => { return (<Signup setAuthStatus={setAuthStatus} />) }}></Route>
         <Route exact path="/home" render={() => { return authStatus === AuthStatus.LOGGED_IN ? <AssistantPage /> : <PageNotFound /> }}></Route>
+        <Route exact path="/new-session" render={() => { return authStatus === AuthStatus.LOGGED_IN ? <RecorderScreen /> : <PageNotFound /> }}></Route>
         <Route component={PageNotFound} />
       </Switch>
       {showFooter() && <Footer />}

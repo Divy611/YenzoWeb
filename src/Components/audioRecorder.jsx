@@ -1,7 +1,9 @@
 import Meyda from 'meyda';
-import { motion } from "framer-motion";
-import * as PitchFinder from 'pitchfinder'
+import { motion } from 'framer-motion'
+import * as tf from '@tensorflow/tfjs'
+import '@tensorflow/tfjs-backend-webgl'
 import WaveformVisualizer from './waveform'
+//import * as PitchFinder from 'pitchfinder'
 import NoTextLogo from '../assets/logo_no_title.png'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
@@ -21,108 +23,106 @@ export const MotionDots = () => {
 
 export const RecorderScreen = () => {
     const streamRef = useRef(null);
-    const analyserRef = useRef(null);
+    const sourceRef = useRef(null);
+    const processorRef = useRef(null);
     const audioChunksRef = useRef([]);
-    const animationRef = useRef(null);
+    const audioContextRef = useRef(null);
     const mediaRecorderRef = useRef(null);
-    const meydaAnalyzerRef = useRef(null);
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(false);//eslint-disable-next-line
     const [audioUrl, setAudioUrl] = useState(null);
+    const [analyser, setAnalyser] = useState(null);
     const [isRecording, setIsRecording] = useState(false);//eslint-disable-next-line
-    const [recordingError, setRecordingError] = useState(null);//eslint-disable-next-line
-    useEffect(() => { return () => { stopRecording(); cancelAnimationFrame(animationRef.current); }; }, []);
+    const [recordingError, setRecordingError] = useState(null);
+    useEffect(() => {
+        return () => {
+            stopRecording();
+            if (audioContextRef.current) {
+                audioContextRef.current.close();
+            }
+        };
+    }, []);
 
     const startRecording = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
+            audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+
+            const analyserNode = audioContextRef.current.createAnalyser();
+            analyserNode.fftSize = 2048;
+            const source = audioContextRef.current.createMediaStreamSource(stream);
+            source.connect(analyserNode);
+
+            sourceRef.current = source;
+            setAnalyser(analyserNode);
             mediaRecorderRef.current = new MediaRecorder(stream);
-            mediaRecorderRef.current.ondataavailable = (event) => { if (event.data.size > 0) { audioChunksRef.current.push(event.data); } };
-
-            mediaRecorderRef.current.onstop = async () => {
-                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-                const url = URL.createObjectURL(audioBlob);
-                setAudioUrl(url);
-                recordings.push(url);
-                audioChunksRef.current = [];
-
-                const analysisMetrics = await analyzeAudio(audioBlob);
-                setMetrics(prevMetrics => ({ ...prevMetrics, ...analysisMetrics }));
-            };
             mediaRecorderRef.current.start();
-            setupVisualizer(stream);
-            setupMeydaAnalyzer(stream);
             setIsRecording(true);
-            setRecordingError(null);
-            setMetrics(null);
-        } catch (err) { setRecordingError('Error accessing microphone.'); }
+        } catch (err) {
+            console.error('Error accessing microphone:', err);
+        }
     };
 
     const stopRecording = () => {
         if (mediaRecorderRef.current && isRecording) {
             mediaRecorderRef.current.stop();
-            stopVisualizer();
-            if (meydaAnalyzerRef.current) { meydaAnalyzerRef.current.stop(); }
+            if (audioContextRef.current) { audioContextRef.current.close(); }
             setIsRecording(false);
         }
     };
 
-    const setupVisualizer = (stream) => {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyserRef.current = audioContext.createAnalyser();
-        const source = audioContext.createMediaStreamSource(stream);
-        source.connect(analyserRef.current);
+    const setupTensorFlowAnalyzer = (stream) => {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+        sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
+        const bufferSize = 2048;
+        processorRef.current = audioContextRef.current.createScriptProcessor(bufferSize, 1, 1);
+        sourceRef.current.connect(processorRef.current);
+        processorRef.current.connect(audioContextRef.current.destination);
+
+        processorRef.current.onaudioprocess = async (e) => {
+            const inputData = e.inputBuffer.getChannelData(0);
+            const tensorInput = tf.tensor1d(inputData);
+            const features = await extractFeatures(tensorInput);
+
+            setMetrics(prevMetrics => ({ ...prevMetrics, ...features }));
+            tensorInput.dispose();
+        };
     };
 
-    const stopVisualizer = () => {
-        if (streamRef.current) { streamRef.current.getTracks().forEach((track) => track.stop()); }
+    const extractFeatures = async (tensorInput) => {
+        const rms = tf.sqrt(tf.mean(tf.square(tensorInput)));
+        const spectralFlatness = tf.exp(tf.mean(tf.log(tensorInput.abs().add(1e-6)))).div(tf.mean(tensorInput.abs().add(1e-6)));
+
+        const tensorLength = tensorInput.shape[0];
+        const firstPart = tensorInput.slice([0], [tensorLength - 1]);
+        const secondPart = tensorInput.slice([1], [tensorLength - 1]);
+        const signChanges = secondPart.sub(firstPart).sign().abs();
+        const zeroCrossings = tf.sum(signChanges).div(2);
+
+        const estimatedPitch = tf.scalar(audioContextRef.current.sampleRate).div(zeroCrossings.mul(2));
+        const [volumeValue, clarityValue, pitchValue] = await Promise.all([
+            rms.data(),
+            spectralFlatness.data(),
+            estimatedPitch.data()
+        ]);
+        tf.dispose([rms, spectralFlatness, firstPart, secondPart, signChanges, zeroCrossings, estimatedPitch]);
+
+        return {
+            volume: Number(volumeValue[0].toFixed(2)),
+            clarity: Number(clarityValue[0].toFixed(2)),
+            pitch: Number(pitchValue[0].toFixed(2))
+        };
     };
 
     const analyzeAudio = async (audioBlob) => {
         const arrayBuffer = await audioBlob.arrayBuffer();
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
+        const tensorData = tf.tensor1d(audioBuffer.getChannelData(0));
+        const features = await extractFeatures(tensorData);
+        tensorData.dispose();
 
-        const pitchDetector = PitchFinder.AMDF();
-        const float32Array = audioBuffer.getChannelData(0);
-        const chunkSize = 2048;
-        const pitches = [];
-        for (let i = 0; i < float32Array.length; i += chunkSize) {
-            const chunk = float32Array.slice(i, i + chunkSize);
-            const pitch = pitchDetector(chunk);
-            if (pitch) pitches.push(pitch);
-        }
-        let averagePitch = null;
-        let confidence = 0;
-        if (pitches.length > 0) {
-            averagePitch = pitches.reduce((sum, pitch) => sum + pitch, 0) / pitches.length;
-            const pitchVariance = pitches.reduce((sum, pitch) => sum + Math.pow(pitch - averagePitch, 2), 0) / pitches.length;
-            confidence = Math.max(0, Math.min(100, 100 - (pitchVariance / 10)));
-        }
-        averagePitch = averagePitch !== null ? Number(averagePitch.toFixed(2)) : null;
-        confidence = Number(confidence.toFixed(2));
-        return { pitch: averagePitch, confidence };
-    };
-
-    const setupMeydaAnalyzer = (stream) => {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioContext.createMediaStreamSource(stream);
-
-        meydaAnalyzerRef.current = Meyda.createMeydaAnalyzer({
-            audioContext: audioContext,
-            source: source,
-            bufferSize: 512,
-            featureExtractors: ['rms', 'spectralFlatness'],
-            callback: (features) => {
-                setMetrics((prevMetrics) => ({
-                    ...prevMetrics,
-                    volume: features.rms !== undefined ? Number(features.rms.toFixed(2)) : prevMetrics?.volume ?? null,
-                    clarity: features.spectralFlatness !== undefined ? Number(features.spectralFlatness.toFixed(2)) : prevMetrics?.clarity ?? null
-                }));
-            }
-        });
-        meydaAnalyzerRef.current.start();
+        return features;
     };
     const handleClick = () => {
         if (isRecording) { stopRecording(); }
@@ -171,7 +171,7 @@ export const RecorderScreen = () => {
             <div className="w-full flex flex-col justify-between items-center relative overflow-y-auto">
                 {recordings.length === 0 && !metrics
                     ? isRecording
-                        ? <WaveformVisualizer analyser={analyserRef.current} />
+                        ? <WaveformVisualizer analyser={audioContextRef.current} />
                         : <div className="w-1/3 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="px-4 py-5 items-center text-center">
                                 <h1 className="text-white text-md">Hi, User!</h1>
@@ -179,7 +179,7 @@ export const RecorderScreen = () => {
                             </motion.div>
                         </div> : null
                 }
-                {loading && (<WaveformVisualizer analyser={analyserRef.current} />)}
+                {loading && (<WaveformVisualizer analyser={audioContextRef.current} />)}
                 {!loading && metrics && (
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }} className="w-1/2 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600 p-5 text-center">
                         <h1 className="pb-7 text-white text-lg">Analysis Results</h1>
