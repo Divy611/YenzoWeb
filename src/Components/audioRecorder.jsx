@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const recordings = [];
+const fillerWords = ['uh', 'um', 'like', 'you know', 'so', 'actually', 'basically'];
 
 export const MotionDots = () => {
     return (
@@ -24,20 +25,20 @@ export const RecorderScreen = () => {
     const sourceRef = useRef(null);
     const analyserRef = useRef(null);
     const animationRef = useRef(null);
-    const processorRef = useRef(null);
     const audioContextRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(false);//eslint-disable-next-line
     const [audioUrl, setAudioUrl] = useState(null);
     const [isRecording, setIsRecording] = useState(false);//eslint-disable-next-line
+    const [fillerWordCount, setFillerWordCount] = useState(0);//eslint-disable-next-line
     const [recordingError, setRecordingError] = useState(null);
     useEffect(() => {
         return () => {
             stopRecording();
             if (audioContextRef.current) { audioContextRef.current.close(); }
             if (animationRef.current) { cancelAnimationFrame(animationRef.current); }
-        };
+        };//eslint-disable-next-line
     }, []);
 
     const startRecording = async () => {
@@ -46,26 +47,26 @@ export const RecorderScreen = () => {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             streamRef.current = stream;
             audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-
             analyserRef.current = audioContextRef.current.createAnalyser();
             analyserRef.current.fftSize = 2048;
             sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
             sourceRef.current.connect(analyserRef.current);
-
             mediaRecorderRef.current = new MediaRecorder(stream);
+
             mediaRecorderRef.current.ondataavailable = (event) => {
                 if (event.data.size > 0) {
                     const audioBlob = new Blob([event.data], { type: 'audio/wav' });
                     const url = URL.createObjectURL(audioBlob);
                     setAudioUrl(url);
+                    analyzeAudio(audioBlob);
                 }
             };
             mediaRecorderRef.current.start();
-
             setIsRecording(true);
             setRecordingError(null);
             analyzeAudioLoop();
-        } catch (err) { setRecordingError('Error accessing microphone.'); }
+        }
+        catch (err) { setRecordingError('Error accessing microphone.'); }
     };
 
     const stopRecording = () => {
@@ -84,77 +85,94 @@ export const RecorderScreen = () => {
         const bufferLength = analyserRef.current.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         analyserRef.current.getByteFrequencyData(dataArray);
-
         const tensorData = tf.tensor1d(dataArray);
         const volume = tf.mean(tensorData);
         const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tensorData.add(1e-6)));
         const maxIndex = tf.argMax(tensorData);
         const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
         const [volumeValue, clarityValue, pitchValue] = [volume, clarity, estimatedPitch].map(t => t.dataSync()[0]);
+        const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
 
         setMetrics({
             volume: Number(volumeValue.toFixed(2)),
             clarity: Number(clarityValue.toFixed(2)),
             pitch: Number(pitchValue.toFixed(2)),
-            confidence: 95
+            confidence: Number(confidenceValue.toFixed(2))
         });
+
         tf.dispose([tensorData, volume, clarity, maxIndex, estimatedPitch]);
         animationRef.current = requestAnimationFrame(analyzeAudioLoop);
     };
 
-    const extractFeatures = async (tensorInput) => {
-        const rms = tf.sqrt(tf.mean(tf.square(tensorInput)));
-        const spectralFlatness = tf.exp(tf.mean(tf.log(tensorInput.abs().add(1e-6)))).div(tf.mean(tensorInput.abs().add(1e-6)));
-
-        const tensorLength = tensorInput.shape[0];
-        const firstPart = tensorInput.slice([0], [tensorLength - 1]);
-        const secondPart = tensorInput.slice([1], [tensorLength - 1]);
-        const signChanges = secondPart.sub(firstPart).sign().abs();
-        const zeroCrossings = tf.sum(signChanges).div(2);
-
-        const estimatedPitch = tf.scalar(audioContextRef.current.sampleRate).div(zeroCrossings.mul(2));
-        const [volumeValue, clarityValue, pitchValue] = await Promise.all([
-            rms.data(),
-            spectralFlatness.data(),
-            estimatedPitch.data()
-        ]);
-        tf.dispose([rms, spectralFlatness, firstPart, secondPart, signChanges, zeroCrossings, estimatedPitch]);
-
-        return {
-            volume: Number(volumeValue[0].toFixed(2)),
-            clarity: Number(clarityValue[0].toFixed(2)),
-            pitch: Number(pitchValue[0].toFixed(2))
-        };
+    const calculateConfidence = (volume, clarity, pitch) => {
+        const avgVolume = 128;
+        const pitchThreshold = 100;
+        const clarityConfidence = Math.min(clarity / 1, 1);
+        const volumeConfidence = Math.min(Math.abs(volume - avgVolume) / avgVolume, 1);
+        const pitchConfidence = Math.min(Math.abs(pitch - pitchThreshold) / pitchThreshold, 1);
+        const overallConfidence = (volumeConfidence + pitchConfidence + clarityConfidence) / 3;
+        return overallConfidence * 100;
     };
 
-    //eslint-disable-next-line
-    const setupTensorFlowAnalyzer = (stream) => {
-        const bufferSize = 2048;
-        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-        sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
-        processorRef.current = audioContextRef.current.createScriptProcessor(bufferSize, 1, 1);
-        sourceRef.current.connect(processorRef.current);
-        processorRef.current.connect(audioContextRef.current.destination);
-
-        processorRef.current.onaudioprocess = async (e) => {
-            const inputData = e.inputBuffer.getChannelData(0);
-            const tensorInput = tf.tensor1d(inputData);
-            const features = await extractFeatures(tensorInput);
-            setMetrics(prevMetrics => ({ ...prevMetrics, ...features }));
-            tensorInput.dispose();
-        };
-    };
-
-    //eslint-disable-next-line
     const analyzeAudio = async (audioBlob) => {
-        const arrayBuffer = await audioBlob.arrayBuffer();
+        const arrayBuffer = await audioBlob.arrayBuffer();//eslint-disable-next-line
         const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
-        const tensorData = tf.tensor1d(audioBuffer.getChannelData(0));
-        const features = await extractFeatures(tensorData);
-        tensorData.dispose();
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
 
-        return features;
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                detectFillerWords(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+            };
+            recognition.start();
+        }
+        else { console.error('SpeechRecognition API is not supported in this browser.'); }
+        const transcribedText = await transcribeAudio(audioBlob);
+        const fillerCount = detectFillerWords(transcribedText);
+        setFillerWordCount(fillerCount);
     };
+
+    const detectFillerWords = (transcript) => {
+        const words = transcript.toLowerCase().split(' ');
+        const fillerCount = words.filter(word => fillerWords.includes(word)).length;
+
+        console.log('Filler words detected:', fillerCount);
+        setFillerWordCount(fillerCount);
+    };
+    const transcribeAudio = async (audioBlob) => {
+        return new Promise((resolve, reject) => {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                reject('SpeechRecognition API is not supported in this browser.');
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const fillerWordCount = fillerWords.reduce((count, word) => {
+                    const wordRegex = new RegExp(`\\b${word}\\b`, 'gi');
+                    return count + (transcript.match(wordRegex) || []).length;
+                }, 0);
+                setFillerWordCount(fillerWordCount);
+                resolve(transcript);
+            };
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                resolve('');
+            };
+            recognition.start();
+        });
+    };
+
     const handleClick = () => {
         if (isRecording) { stopRecording(); }
         else { startRecording(); }
@@ -162,7 +180,7 @@ export const RecorderScreen = () => {
         setIsRecording(!isRecording);
     };
     const Counter = ({ targetNumber }) => {
-        const [count, setCount] = useState(0);
+        const [count, setCount] = useState(targetNumber - 10);
         useEffect(() => {
             if (count < targetNumber) {
                 const interval = setInterval(() => { setCount(prevCount => Math.min(prevCount + 1, targetNumber)); }, 7);
@@ -174,17 +192,22 @@ export const RecorderScreen = () => {
 
     const MetricTile = ({ title, value, position }) => {
         return (
-            <div className={`p-5 w-1/2 flex justify-between items-center border-${position} border-green-600`}>
+            <div className={`p-4 w-1/2 flex justify-between items-center border-${position} border-green-600`}>
                 <h2 className="text-white text-sm">{title}</h2>
                 <Counter targetNumber={value} />
             </div>
         )
     }
     const history = useHistory();
-    const backToHome = () => { history.goBack(); }
+    const backToHome = () => {
+        history.goBack();
+        if (isRecording === true) { setIsRecording(!isRecording); }
+    }
+    const hasSpoken = useRef(false);
+    const greetingText = `Hi, User!`;
+    const [index, setIndex] = useState(0);
     const [typedText, setTypedText] = useState('');
     const fullText = `Ready to begin a new session? Click the button below to start talking!`;
-    const [index, setIndex] = useState(0);
 
     useEffect(() => {
         if (index < fullText.length) {
@@ -192,11 +215,22 @@ export const RecorderScreen = () => {
             return () => clearTimeout(timeout);
         }
     }, [index, fullText]);
+    useEffect(() => {
+        if (!hasSpoken.current) {
+            const speakText = () => {
+                const utterance = new SpeechSynthesisUtterance(greetingText + fullText);
+                utterance.lang = 'en-US';
+                window.speechSynthesis.speak(utterance);
+            };
+            speakText();
+            hasSpoken.current = true;
+        }
+    }, [greetingText, fullText]);
     return (
         <div className={`flex flex-col h-[100vh] justify-between items-center overflow-y-hidden bg-[#151418]`}>
             <header className='p-6 w-full'>
                 <button className='flex text-white items-center' onClick={backToHome}>
-                    <i className="fas fa-chevron-left text-xl"></i><h1 className='ml-2.5'>Back to home</h1>
+                    <i className="fas fa-chevron-left text-xl"></i><h1 className='ml-2.5'>Back to Dashboard</h1>
                 </button>
             </header>
             <div className="w-full flex flex-col justify-between items-center relative overflow-y-auto">
@@ -205,7 +239,7 @@ export const RecorderScreen = () => {
                         ? <WaveformVisualizer analyser={analyserRef.current} />
                         : <div className="w-1/3 bg-[#0E0D12] rounded-2xl border border-green-600 shadow-md shadow-green-600">
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }} className="px-4 py-5 items-center text-center">
-                                <h1 className="text-white text-md">Hi, User!</h1>
+                                <h1 className="text-white text-md">{greetingText}</h1>
                                 <p className="text-white py-1 text-sm">{typedText}</p>
                             </motion.div>
                         </div>
@@ -223,10 +257,17 @@ export const RecorderScreen = () => {
                             <MetricTile title={"Clarity"} value={metrics.clarity || 'NA'} position={"r"} />
                             <MetricTile title={"Volume"} value={metrics.volume || 'NA'} position={"l"} />
                         </div>
+                        <div className="flex border-t border-green-600">
+                            <MetricTile title={"Confidence"} value={metrics.confidence || 'NA'} position={"r"} />
+                            <MetricTile title={"Filler Words"} value={fillerWordCount || '0'} position={"l"} />
+                        </div>
                         <div className="w-full">
                             <div className="px-5 py-3.5 flex justify-between items-center justify-between border-t border-green-600">
-                                <h2 className="text-white text-sm">Confidence</h2>
-                                <h1 className="text-white text-2xl font-extrabold">{metrics.confidence || 'NA'} %</h1>
+                                <h2 className="text-white text-start text-md">You were better <br />than</h2>
+                                <div className="flex items-center">
+                                    <h1 className="text-white text-2xl font-extrabold">{'50' || 'NA'}%</h1>
+                                    <p className='ml-2 text-white'>Of the users!</p>
+                                </div>
                             </div>
                         </div>
                     </motion.div>

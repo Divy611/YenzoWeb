@@ -55,5 +55,17 @@ export default function WaveformVisualizer({ analyser }) {
         draw();
         return () => { cancelAnimationFrame(animationRef.current); };
     }, [analyser]);
-    return <canvas ref={canvasRef} width="800" height="200" style={{ background: 'transparent' }} />;
+    return (
+        <div className='h-screen w-screen flex flex-col justify-between items-center'>
+            <div className='p-5 w-full flex items-center justify-between'>
+                <h1 className='text-white'>Confidence Bar Here</h1>
+                <h1 className='text-white'>Pitch Bar Here</h1>
+            </div>
+            <canvas ref={canvasRef} width="800" height="200" style={{ background: 'transparent' }} />
+            <div className='p-5 w-full flex items-center justify-between'>
+                <h1 className='text-white'>Clarity Bar Here</h1>
+                <h1 className='text-white'>Volume Bar Here</h1>
+            </div>
+        </div>
+    );
 }
