@@ -1,8 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 
 export default function WaveformVisualizer({ analyser }) {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
+    const [metrics, setMetrics] = useState({
+        confidence: 0,
+        pitch: 0,
+        clarity: 0,
+        volume: 0
+    });
 
     useEffect(() => {
         if (!analyser) return;
@@ -50,21 +56,48 @@ export default function WaveformVisualizer({ analyser }) {
             drawHalf(HEIGHT / 2, -1);
             drawHalf(HEIGHT / 2, 1);
             ctx.restore();
-        };
 
+            setMetrics({
+                confidence: (Math.max(...dataArray) / 255) * 100,
+                pitch: (dataArray[10] / 255) * 100,
+                clarity: (dataArray[20] / 255) * 100,
+                volume: (dataArray.reduce((acc, val) => acc + val, 0) / (bufferLength * 255)) * 100
+            });
+        };
         draw();
         return () => { cancelAnimationFrame(animationRef.current); };
     }, [analyser]);
+
     return (
         <div className='h-screen w-screen flex flex-col justify-between items-center'>
             <div className='p-5 w-full flex items-center justify-between'>
-                <h1 className='text-white'>Confidence Bar Here</h1>
-                <h1 className='text-white'>Pitch Bar Here</h1>
+                <div className='flex flex-col items-center'>
+                    <div className='text-white'>Confidence</div>
+                    <div className='bg-gray-700 w-32 h-2 rounded'>
+                        <div className='bg-green-500 h-full rounded' style={{ width: `${metrics.confidence}%` }}></div>
+                    </div>
+                </div>
+                <div className='flex flex-col items-center'>
+                    <div className='text-white'>Pitch</div>
+                    <div className='bg-gray-700 w-32 h-2 rounded'>
+                        <div className='bg-blue-500 h-full rounded' style={{ width: `${metrics.pitch}%` }}></div>
+                    </div>
+                </div>
             </div>
             <canvas ref={canvasRef} width="800" height="200" style={{ background: 'transparent' }} />
             <div className='p-5 w-full flex items-center justify-between'>
-                <h1 className='text-white'>Clarity Bar Here</h1>
-                <h1 className='text-white'>Volume Bar Here</h1>
+                <div className='flex flex-col items-center'>
+                    <div className='text-white'>Clarity</div>
+                    <div className='bg-gray-700 w-32 h-2 rounded'>
+                        <div className='bg-purple-500 h-full rounded' style={{ width: `${metrics.clarity}%` }}></div>
+                    </div>
+                </div>
+                <div className='flex flex-col items-center'>
+                    <div className='text-white'>Volume</div>
+                    <div className='bg-gray-700 w-32 h-2 rounded'>
+                        <div className='bg-red-500 h-full rounded' style={{ width: `${metrics.volume}%` }}></div>
+                    </div>
+                </div>
             </div>
         </div>
     );
