@@ -22,7 +22,6 @@ export default function AssistantPage() {
 const VerticalTabs = ({ tabs }) => {
     const [activeTab, setActiveTab] = useState(0);
     const [isExpanded, setIsExpanded] = useState(false);
-
     const handleClick = (index) => setActiveTab(index);
     const handleMouseEnter = () => setIsExpanded(true);
     const handleMouseLeave = () => setIsExpanded(false);
