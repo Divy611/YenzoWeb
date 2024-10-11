@@ -12,8 +12,8 @@ import React, { useEffect, useState } from 'react'
 import AssistantPage from './Components/assistantPage'
 import Header, { AuthHeader } from './Components/header'
 import { RecorderScreen } from './Components/audioRecorder'
-import { BrowserRouter as Router, Switch, useLocation, Route } from 'react-router-dom/cjs/react-router-dom.min'
 import { hideHeaderPaths, noAuthCheckRoutes } from './Components/lists'
+import { BrowserRouter as Router, Switch, useLocation, Route } from 'react-router-dom/cjs/react-router-dom.min'
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
