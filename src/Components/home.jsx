@@ -19,15 +19,16 @@ export default function Home() {
 }
 
 const HeroSection = () => {
+    const history = useHistory();
     let { scrollYProgress } = useScroll();
     let parallax = useTransform(scrollYProgress, [0, 7], ["0%", "-295%"]);
     return (
         <motion.div className="mx-auto py-5" style={{ translateY: parallax, perspective: 1750 }} >
             <div className="items-center lg:flex">
                 <div className="w-1/2 px-10">
-                    <motion.div initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="w-1/4 py-1 border border-green-600 rounded-xl">
-                        <h1 className="px-1.5 text-gray-300 capitalize text-lg">Coming soon...</h1>
-                    </motion.div>
+                    <motion.button onClick={() => { history.push('/login') }} initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="w-1/4 py-1 border border-green-600 rounded-xl">
+                        <h1 className="px-1.5 text-gray-300 capitalize text-lg">Launch Now!</h1>
+                    </motion.button>
                     <motion.h1 initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="py-3 font-bold text-white xl:text-6xl sm:text-3xl tracking-wide"><span className='text-green-500'>YENZO.</span><br /> YOUR AI SPEECH COACH</motion.h1>
                     <motion.p initial={{ opacity: 0, x: -25 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="mt-3 text-gray-300 text-xl">Mastering Communication,<br /> One word at a time...</motion.p>
                 </div>
