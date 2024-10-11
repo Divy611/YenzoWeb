@@ -1,0 +1,9 @@
+{
+  "routes": [
+    {
+      "route": "/login",
+      "redirect": "/login",
+      "statusCode": 302
+    }
+  ]
+}
