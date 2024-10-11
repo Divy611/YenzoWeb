@@ -1,13 +1,9 @@
+import { users } from './lists'
 import { AuthStatus } from '../App'
 import LoadingScreen from './loading'
 import React, { useState } from 'react'
 import NoTextLogo from '../assets/logo_no_title.png'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom'
-
-const users = [
-    { email: 'divy.parikh@hotmail.com', password: 'Divy@123' },
-    { email: 'pandey.aditya1003@gmail.com', password: 'Aditya@123' }
-];
 
 export default function Login({ setAuthStatus }) {
     const history = useHistory();

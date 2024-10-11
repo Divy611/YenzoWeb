@@ -1,3 +1,4 @@
+import { agendas } from './lists'
 import { motion } from 'framer-motion'
 import Sim1 from '../assets/sim1.jpeg'
 import Sim2 from '../assets/sim2.jpeg'
@@ -57,11 +58,6 @@ const VerticalTabs = ({ tabs }) => {
 
 const HomeScreen = () => {
     const history = useHistory();
-    const agendas = [
-        { heading: "Watch a quick tutorial video", isComplete: true, points: 5 },
-        { heading: "Practice a mock interview", isComplete: false, points: 5 },
-        { heading: "Check out your speech summary", isComplete: false, points: 5 },
-    ];
     const AgendaList = () => {
         return (
             <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.35 }} className="w-full h-1/2 2xl:h-1/3 bg-[#151418] rounded-xl shadow-md shadow-gray-600">
@@ -129,9 +125,24 @@ const Simulations = () => {
     )
 }
 const LeaderBoard = () => {
-    return (<section className="px-5 py-12 mx-auto bg-[#16151A] h-[100vh] overflow-y-auto"></section>)
+    return (
+        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[100vh] overflow-y-auto">
+            <div className="flex flex-col text-center w-full mb-20">
+                <motion.h1 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-5xl font-semibold title-font mb-4 text-white">Leaderboard</motion.h1>
+            </div>
+        </section>
+    )
 }
 
 const Settings = () => {
-    return (<section className="px-5 py-12 mx-auto bg-[#16151A] h-[100vh] overflow-y-auto"></section>)
+    const SettingsTile = () => {
+        return (<></>)
+    }
+    return (
+        <section className="px-5 py-12 mx-auto bg-[#16151A] h-[100vh] overflow-y-auto">
+            <div className="flex flex-col text-center w-full mb-20">
+                <motion.h1 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="text-5xl font-semibold title-font mb-4 text-white">Settings</motion.h1>
+            </div>
+        </section>
+    )
 }

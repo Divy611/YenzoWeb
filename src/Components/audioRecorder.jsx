@@ -2,12 +2,10 @@ import { motion } from 'framer-motion'
 import * as tf from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-backend-webgl'
 import WaveformVisualizer from './waveform'
+import { fillerWords, recordings } from './lists'
 import NoTextLogo from '../assets/logo_no_title.png'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-
-const recordings = [];
-const fillerWords = ['uh', 'um', 'like', 'you know', 'so', 'actually', 'basically'];
 
 export const MotionDots = () => {
     return (
@@ -120,8 +118,6 @@ export const RecorderScreen = () => {
     const detectFillerWords = (transcript) => {
         const words = transcript.toLowerCase().split(' ');
         const fillerCount = words.filter(word => fillerWords.includes(word)).length;
-
-        console.log('Filler words detected:', fillerCount);
         setFillerWordCount(fillerCount);
     };
     const transcribeAudio = async (audioBlob) => {

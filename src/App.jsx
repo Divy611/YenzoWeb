@@ -13,6 +13,7 @@ import AssistantPage from './Components/assistantPage'
 import Header, { AuthHeader } from './Components/header'
 import { RecorderScreen } from './Components/audioRecorder'
 import { BrowserRouter as Router, Switch, useLocation, Route } from 'react-router-dom/cjs/react-router-dom.min'
+import { hideHeaderPaths, noAuthCheckRoutes } from './Components/lists'
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -48,9 +49,7 @@ function App() {
 
 function AppContent({ authStatus, setAuthStatus }) {
   const location = useLocation();
-  const noAuthCheckRoutes = ['/', '/about', '/pricing', '/team', '/contact'];
   const shouldCheckAuth = !noAuthCheckRoutes.includes(location.pathname);
-  const hideHeaderPaths = ['/home', '/login', '/login-admin', '/signup', '/404', '/new-session'];
 
   const getHeader = () => {
     if (location.pathname === '/home' || location.pathname === '/new-session') { return null; }

@@ -28,7 +28,6 @@ export function Globe() {
             positions[i3] = Math.sin(angle1) * Math.cos(angle2) * sphereRadius;
             positions[i3 + 1] = Math.sin(angle1) * Math.sin(angle2) * sphereRadius;
             positions[i3 + 2] = Math.cos(angle1) * sphereRadius;
-
             speeds[i] = Math.random() * 0.02 + 0.02;
         }
 
@@ -72,9 +71,7 @@ export function Globe() {
                 const z = positions[i3 + 2];
                 const distance = Math.sqrt(x * x + y * y + z * z);
 
-                if (distance < sphereRadius * 0.9 || distance > sphereRadius * 1.5) {
-                    speeds[i] *= -1;
-                }
+                if (distance < sphereRadius * 0.9 || distance > sphereRadius * 1.5) { speeds[i] *= -1; }
 
                 positions[i3] += (x / distance) * speeds[i];
                 positions[i3 + 1] += (y / distance) * speeds[i];
@@ -108,12 +105,9 @@ export function Globe() {
             scene.remove(particlesMesh);
 
             renderer.dispose();
-            if (mountRef.current) {
-                mountRef.current.removeChild(renderer.domElement);
-            }
+            if (mountRef.current) { mountRef.current.removeChild(renderer.domElement); }
         };
     }, []);
-
     return <div ref={mountRef} />;
 };
 
@@ -155,10 +149,7 @@ export const Laptop = ({ imageUrl }) => {
                 scene.add(imageMesh);
             },
             undefined,
-            (err) => {
-                console.error('An error occurred loading the image:', err);
-                setError('Failed to load image');
-            }
+            () => { setError('Failed to load image'); }
         );
 
         const ambientLight = new THREE.AmbientLight(0x404040);
@@ -186,14 +177,11 @@ export const Laptop = ({ imageUrl }) => {
             handleResize();
             animate();
         }
-
         window.addEventListener('resize', handleResize);
 
         return () => {
             window.removeEventListener('resize', handleResize);
-            if (mountRef.current && renderer.domElement) {
-                mountRef.current.removeChild(renderer.domElement);
-            }
+            if (mountRef.current && renderer.domElement) { mountRef.current.removeChild(renderer.domElement); }
         };
     }, [imageUrl]);
     return (
