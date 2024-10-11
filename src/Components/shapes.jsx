@@ -43,7 +43,6 @@ export function Globe() {
 
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
-
         camera.position.z = 20;
 
         let mouseX = 0;
@@ -55,7 +54,6 @@ export function Globe() {
         };
 
         window.addEventListener('mousemove', onMouseMove);
-
         let animationFrameId;
 
         const animate = () => {
@@ -87,7 +85,6 @@ export function Globe() {
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         };
-
         window.addEventListener('resize', handleResize);
 
         return () => {
@@ -104,7 +101,7 @@ export function Globe() {
             scene.remove(sphere);
             scene.remove(particlesMesh);
 
-            renderer.dispose();
+            renderer.dispose();//eslint-disable-next-line
             if (mountRef.current) { mountRef.current.removeChild(renderer.domElement); }
         };
     }, []);
@@ -180,7 +177,7 @@ export const Laptop = ({ imageUrl }) => {
         window.addEventListener('resize', handleResize);
 
         return () => {
-            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize);//eslint-disable-next-line
             if (mountRef.current && renderer.domElement) { mountRef.current.removeChild(renderer.domElement); }
         };
     }, [imageUrl]);

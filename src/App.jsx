@@ -42,7 +42,7 @@ function App() {
     checkAuthStatus();
     window.addEventListener('storage', checkAuthStatus);
     return () => { window.removeEventListener('storage', checkAuthStatus); };
-  }, []);
+  }, [setAuthStatus]);
   if (isLoading) { return <LoadingScreen />; }
   return (<Router><AppContent authStatus={authStatus} setAuthStatus={setAuthStatus} setIsLoading={setIsLoading} /></Router>);
 }
@@ -63,7 +63,7 @@ function AppContent({ authStatus, setAuthStatus }) {
     if (!shouldCheckAuth) { return; }
     const simulateAuthCheck = () => { setTimeout(() => { setAuthStatus(AuthStatus.NOT_LOGGED_IN); }, 1000); };
     simulateAuthCheck();
-  }, [shouldCheckAuth]);
+  }, [shouldCheckAuth, setAuthStatus]);
   if (shouldCheckAuth && authStatus === AuthStatus.NOT_DETERMINED) { return <LoadingScreen />; }
   return (
     <>

@@ -135,9 +135,6 @@ const LeaderBoard = () => {
 }
 
 const Settings = () => {
-    const SettingsTile = () => {
-        return (<></>)
-    }
     return (
         <section className="px-5 py-12 mx-auto bg-[#16151A] h-[100vh] overflow-y-auto">
             <div className="flex flex-col text-center w-full mb-20">
