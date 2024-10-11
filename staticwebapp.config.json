@@ -1,1 +1,10 @@
-{}
+{
+  "routes": [
+    {
+      "route": "/login",
+      "rewrite": "/login",
+      "redirect": "https://ashy-dune-038ef1400.5.azurestaticapps.net/login",
+      "statusCode": 302
+    }
+  ]
+}
