@@ -3,12 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 export default function WaveformVisualizer({ analyser }) {
     const canvasRef = useRef(null);
     const animationRef = useRef(null);
-    const [metrics, setMetrics] = useState({
-        confidence: 0,
-        pitch: 0,
-        clarity: 0,
-        volume: 0
-    });
+    const [metrics, setMetrics] = useState({ confidence: 0, pitch: 0, clarity: 0, volume: 0 });
 
     useEffect(() => {
         if (!analyser) return;
@@ -70,33 +65,36 @@ export default function WaveformVisualizer({ analyser }) {
 
     return (
         <div className='h-screen w-screen flex flex-col justify-between items-center'>
+            <div className='p-5 w-full flex items-center justify-between'></div>
+            <canvas ref={canvasRef} width="800" height="200" style={{ background: 'transparent' }} />
             <div className='p-5 w-full flex items-center justify-between'>
                 <div className='flex flex-col items-center'>
                     <div className='text-white'>Confidence</div>
                     <div className='bg-gray-700 w-32 h-2 rounded'>
                         <div className='bg-green-500 h-full rounded' style={{ width: `${metrics.confidence}%` }}></div>
                     </div>
+                    <i class="fa-solid fa-caret-up text-white"></i>
                 </div>
                 <div className='flex flex-col items-center'>
                     <div className='text-white'>Pitch</div>
                     <div className='bg-gray-700 w-32 h-2 rounded'>
                         <div className='bg-blue-500 h-full rounded' style={{ width: `${metrics.pitch}%` }}></div>
                     </div>
+                    <i class="fa-solid fa-caret-up text-white"></i>
                 </div>
-            </div>
-            <canvas ref={canvasRef} width="800" height="200" style={{ background: 'transparent' }} />
-            <div className='p-5 w-full flex items-center justify-between'>
                 <div className='flex flex-col items-center'>
                     <div className='text-white'>Clarity</div>
                     <div className='bg-gray-700 w-32 h-2 rounded'>
                         <div className='bg-purple-500 h-full rounded' style={{ width: `${metrics.clarity}%` }}></div>
                     </div>
+                    <i class="fa-solid fa-caret-up text-white"></i>
                 </div>
                 <div className='flex flex-col items-center'>
                     <div className='text-white'>Volume</div>
                     <div className='bg-gray-700 w-32 h-2 rounded'>
                         <div className='bg-red-500 h-full rounded' style={{ width: `${metrics.volume}%` }}></div>
                     </div>
+                    <i class="fa-solid fa-caret-up text-white"></i>
                 </div>
             </div>
         </div>

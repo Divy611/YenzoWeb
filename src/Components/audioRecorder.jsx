@@ -113,33 +113,6 @@ export const RecorderScreen = () => {
         const overallConfidence = (volumeConfidence + pitchConfidence + clarityConfidence) / 3;
         return overallConfidence * 100;
     };
-
-    //const analyzeAudio = async (audioBlob) => {
-    //     const arrayBuffer = await audioBlob.arrayBuffer();//eslint-disable-next-line
-    //     const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
-    //     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    //     if (SpeechRecognition) {
-    //         const recognition = new SpeechRecognition();
-    //         recognition.lang = 'en-US';
-    //         recognition.interimResults = false;
-    //         recognition.maxAlternatives = 1;
-
-    //         recognition.onresult = (event) => {
-    //             const transcript = event.results[0][0].transcript;
-    //             detectFillerWords(transcript);
-    //         };
-
-    //         recognition.onerror = (event) => {
-    //             console.error('Speech recognition error:', event.error);
-    //         };
-    //         recognition.start();
-    //     }
-    //     else { console.error('SpeechRecognition API is not supported in this browser.'); }
-    //     const transcribedText = await transcribeAudio(audioBlob);
-    //     const fillerCount = detectFillerWords(transcribedText);
-    //     setFillerWordCount(fillerCount);
-    // };
-
     const analyzeAudio = async (audioBlob) => {
         const transcribedText = await transcribeAudio(audioBlob);
         detectFillerWords(transcribedText);
@@ -206,29 +179,46 @@ export const RecorderScreen = () => {
     const greetingText = `Hi, User!`;
     const [index, setIndex] = useState(0);
     const [typedText, setTypedText] = useState('');
+    const [voicesLoaded, setVoicesLoaded] = useState(false);
     const fullText = `Ready to begin a new session? Click the button below to start talking!`;
 
     useEffect(() => {
         if (index < fullText.length) {
-            const timeout = setTimeout(() => { setTypedText(prev => prev + fullText[index]); setIndex(index + 1); }, 20);
+            const timeout = setTimeout(() => {
+                setTypedText(prev => prev + fullText[index]);
+                setIndex(index + 1);
+            }, 20);
             return () => clearTimeout(timeout);
         }
     }, [index, fullText]);
+
     useEffect(() => {
-        if (!hasSpoken.current) {
+        if (window.speechSynthesis.getVoices().length > 0) {
+            setVoicesLoaded(true);
+        } else {
+            window.speechSynthesis.onvoiceschanged = () => {
+                setVoicesLoaded(true);
+            };
+        }
+    }, [greetingText, fullText]);
+
+    useEffect(() => {
+        if (voicesLoaded && !hasSpoken.current) {
             const speakText = () => {
                 const utterance = new SpeechSynthesisUtterance(greetingText + fullText);
                 utterance.lang = 'en-US';
                 const voices = window.speechSynthesis.getVoices();
                 const femaleVoice = voices.find(voice => voice.name === 'Google UK English Female');
 
-                if (femaleVoice) { utterance.voice = femaleVoice; }
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
                 window.speechSynthesis.speak(utterance);
             };
             speakText();
             hasSpoken.current = true;
         }
-    }, [greetingText, fullText]);
+    }, [voicesLoaded, greetingText, fullText]);
     return (
         <div className={`flex flex-col h-[100vh] justify-between items-center overflow-y-hidden bg-[#151418]`}>
             <header className='p-6 w-full'>
