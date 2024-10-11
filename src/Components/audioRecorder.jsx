@@ -193,13 +193,8 @@ export const RecorderScreen = () => {
     }, [index, fullText]);
 
     useEffect(() => {
-        if (window.speechSynthesis.getVoices().length > 0) {
-            setVoicesLoaded(true);
-        } else {
-            window.speechSynthesis.onvoiceschanged = () => {
-                setVoicesLoaded(true);
-            };
-        }
+        if (window.speechSynthesis.getVoices().length > 0) { setVoicesLoaded(true); }
+        else { window.speechSynthesis.onvoiceschanged = () => { setVoicesLoaded(true); }; }
     }, [greetingText, fullText]);
 
     useEffect(() => {
@@ -209,10 +204,7 @@ export const RecorderScreen = () => {
                 utterance.lang = 'en-US';
                 const voices = window.speechSynthesis.getVoices();
                 const femaleVoice = voices.find(voice => voice.name === 'Google UK English Female');
-
-                if (femaleVoice) {
-                    utterance.voice = femaleVoice;
-                }
+                if (femaleVoice) { utterance.voice = femaleVoice; }
                 window.speechSynthesis.speak(utterance);
             };
             speakText();
