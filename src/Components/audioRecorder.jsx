@@ -2,10 +2,12 @@ import { motion } from 'framer-motion'
 import * as tf from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-backend-webgl'
 import WaveformVisualizer from './waveform'
-import { fillerWords, recordings } from './lists'
 import NoTextLogo from '../assets/logo_no_title.png'
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+
+const recordings = [];
+const fillerWords = ['uh', 'um', 'like', 'you know', 'so', 'actually', 'basically'];
 
 export const MotionDots = () => {
     return (
@@ -28,7 +30,7 @@ export const RecorderScreen = () => {
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(false);//eslint-disable-next-line
     const [audioUrl, setAudioUrl] = useState(null);
-    const [isRecording, setIsRecording] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);//eslint-disable-next-line
     const [fillerWordCount, setFillerWordCount] = useState(0);//eslint-disable-next-line
     const [recordingError, setRecordingError] = useState(null);
     useEffect(() => {
@@ -85,7 +87,7 @@ export const RecorderScreen = () => {
         analyserRef.current.getByteFrequencyData(dataArray);
         const tensorData = tf.tensor1d(dataArray);
         const volume = tf.mean(tensorData);
-        const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tf.log(tensorData.add(1e-6))));
+        const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tensorData.add(1e-6)));
         const maxIndex = tf.argMax(tensorData);
         const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
         const [volumeValue, clarityValue, pitchValue] = [volume, clarity, estimatedPitch].map(t => t.dataSync()[0]);
@@ -95,7 +97,7 @@ export const RecorderScreen = () => {
             volume: Number(volumeValue.toFixed(2)),
             clarity: Number(clarityValue.toFixed(2)),
             pitch: Number(pitchValue.toFixed(2)),
-            confidence: Number(confidenceValue.toFixed(2)),
+            confidence: Number(confidenceValue.toFixed(2))
         });
 
         tf.dispose([tensorData, volume, clarity, maxIndex, estimatedPitch]);
@@ -111,26 +113,56 @@ export const RecorderScreen = () => {
         const overallConfidence = (volumeConfidence + pitchConfidence + clarityConfidence) / 3;
         return overallConfidence * 100;
     };
+
     const analyzeAudio = async (audioBlob) => {
+        const arrayBuffer = await audioBlob.arrayBuffer();//eslint-disable-next-line
+        const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                detectFillerWords(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+            };
+            recognition.start();
+        }
+        else { console.error('SpeechRecognition API is not supported in this browser.'); }
         const transcribedText = await transcribeAudio(audioBlob);
-        detectFillerWords(transcribedText);
+        const fillerCount = detectFillerWords(transcribedText);
+        setFillerWordCount(fillerCount);
     };
+
     const detectFillerWords = (transcript) => {
         const words = transcript.toLowerCase().split(' ');
         const fillerCount = words.filter(word => fillerWords.includes(word)).length;
+
+        console.log('Filler words detected:', fillerCount);
         setFillerWordCount(fillerCount);
     };
     const transcribeAudio = async (audioBlob) => {
         return new Promise((resolve, reject) => {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
-                reject('SpeechRecognition API is not supported.');
+                reject('SpeechRecognition API is not supported in this browser.');
                 return;
             }
             const recognition = new SpeechRecognition();
             recognition.lang = 'en-US';
             recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
+                const fillerWordCount = fillerWords.reduce((count, word) => {
+                    const wordRegex = new RegExp(`\\b${word}\\b`, 'gi');
+                    return count + (transcript.match(wordRegex) || []).length;
+                }, 0);
+                setFillerWordCount(fillerWordCount);
                 resolve(transcript);
             };
             recognition.onerror = (event) => {
@@ -175,38 +207,25 @@ export const RecorderScreen = () => {
     const greetingText = `Hi, User!`;
     const [index, setIndex] = useState(0);
     const [typedText, setTypedText] = useState('');
-    const [voicesLoaded, setVoicesLoaded] = useState(false);
     const fullText = `Ready to begin a new session? Click the button below to start talking!`;
 
     useEffect(() => {
         if (index < fullText.length) {
-            const timeout = setTimeout(() => {
-                setTypedText(prev => prev + fullText[index]);
-                setIndex(index + 1);
-            }, 20);
+            const timeout = setTimeout(() => { setTypedText(prev => prev + fullText[index]); setIndex(index + 1); }, 20);
             return () => clearTimeout(timeout);
         }
     }, [index, fullText]);
-
     useEffect(() => {
-        if (window.speechSynthesis.getVoices().length > 0) { setVoicesLoaded(true); }
-        else { window.speechSynthesis.onvoiceschanged = () => { setVoicesLoaded(true); }; }
-    }, [greetingText, fullText]);
-
-    useEffect(() => {
-        if (voicesLoaded && !hasSpoken.current) {
+        if (!hasSpoken.current) {
             const speakText = () => {
                 const utterance = new SpeechSynthesisUtterance(greetingText + fullText);
                 utterance.lang = 'en-US';
-                const voices = window.speechSynthesis.getVoices();
-                const femaleVoice = voices.find(voice => voice.name === 'Google UK English Female');
-                if (femaleVoice) { utterance.voice = femaleVoice; }
                 window.speechSynthesis.speak(utterance);
             };
             speakText();
             hasSpoken.current = true;
         }
-    }, [voicesLoaded, greetingText, fullText]);
+    }, [greetingText, fullText]);
     return (
         <div className={`flex flex-col h-[100vh] justify-between items-center overflow-y-hidden bg-[#151418]`}>
             <header className='p-6 w-full'>
