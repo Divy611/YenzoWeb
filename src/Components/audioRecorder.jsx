@@ -4,7 +4,7 @@ import '@tensorflow/tfjs-backend-webgl'
 import WaveformVisualizer from './waveform'
 import NoTextLogo from '../assets/logo_no_title.png'
 import React, { useEffect, useRef, useState } from 'react'
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 const recordings = [];
 const fillerWords = ['uh', 'um', 'like', 'you know', 'so', 'actually', 'basically'];
@@ -27,17 +27,34 @@ export const RecorderScreen = () => {
     const animationRef = useRef(null);
     const audioContextRef = useRef(null);
     const mediaRecorderRef = useRef(null);
+    const [model, setModel] = useState(null);
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(false);//eslint-disable-next-line
     const [audioUrl, setAudioUrl] = useState(null);
+    const [trainingData, setTrainingData] = useState([]);
     const [isRecording, setIsRecording] = useState(false);//eslint-disable-next-line
+    const [trainingLabels, setTrainingLabels] = useState([]);
     const [fillerWordCount, setFillerWordCount] = useState(0);//eslint-disable-next-line
     const [recordingError, setRecordingError] = useState(null);
+    const modelUrl = 'https://raw.githubusercontent.com/Divy611/YenzoWeb/main/src/Models/model.json';
     useEffect(() => {
+        const loadModel = async () => {
+            try {
+                const loadedModel = await tf.loadLayersModel(modelUrl);
+                loadedModel.compile({ optimizer: 'adam', loss: 'meanSquaredError', metrics: ['accuracy'] });
+                setModel(loadedModel);
+                console.log('Model loaded successfully');
+            } catch (err) {
+                console.error('Error loading the model:', err);
+            }
+        };
+
+        loadModel();
+
         return () => {
             stopRecording();
-            if (audioContextRef.current) { audioContextRef.current.close(); }
-            if (animationRef.current) { cancelAnimationFrame(animationRef.current); }
+            if (audioContextRef.current) audioContextRef.current.close();
+            if (animationRef.current) cancelAnimationFrame(animationRef.current);
         };//eslint-disable-next-line
     }, []);
 
@@ -61,46 +78,58 @@ export const RecorderScreen = () => {
                     analyzeAudio(audioBlob);
                 }
             };
+
             mediaRecorderRef.current.start();
             setIsRecording(true);
             setRecordingError(null);
             analyzeAudioLoop();
+        } catch (err) {
+            setRecordingError('Error accessing microphone.');
         }
-        catch (err) { setRecordingError('Error accessing microphone.'); }
     };
 
     const stopRecording = () => {
         if (mediaRecorderRef.current && isRecording) {
             mediaRecorderRef.current.stop();
-            if (streamRef.current) { streamRef.current.getTracks().forEach(track => track.stop()); }
-            if (audioContextRef.current) { audioContextRef.current.close(); }
-            if (animationRef.current) { cancelAnimationFrame(animationRef.current); }
+            if (streamRef.current) streamRef.current.getTracks().forEach(track => track.stop());
+            if (audioContextRef.current) audioContextRef.current.close();
+            if (animationRef.current) cancelAnimationFrame(animationRef.current);
             setIsRecording(false);
         }
     };
 
     const analyzeAudioLoop = () => {
-        if (!analyserRef.current) return;
+        if (!analyserRef.current || model) return;
 
         const bufferLength = analyserRef.current.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
         analyserRef.current.getByteFrequencyData(dataArray);
         const tensorData = tf.tensor1d(dataArray);
-        const volume = tf.mean(tensorData);
-        const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tensorData.add(1e-6)));
+        const inputTensor = tensorData.expandDims(0);  // Add batch dimension
+        const prediction = model.predict(inputTensor);
+        // const volume = tf.mean(tensorData);
+        const predictedVolume = prediction[0].dataSync()[0];
+        //const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tensorData.add(1e-6)));
+        const predictedClarity = prediction[1].dataSync()[0];
         const maxIndex = tf.argMax(tensorData);
-        const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
-        const [volumeValue, clarityValue, pitchValue] = [volume, clarity, estimatedPitch].map(t => t.dataSync()[0]);
-        const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
+        //const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
+        const predictedPitch = prediction[2].dataSync()[0];
+        //const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
+        const [volumeValue, clarityValue, pitchValue] = [
+            predictedVolume,
+            predictedClarity,
+            predictedPitch,
+        ].map((t) => t.dataSync()[0]);
+        const confidenceValue = calculateConfidence(predictedVolume, predictedClarity, predictedPitch);
 
         setMetrics({
             volume: Number(volumeValue.toFixed(2)),
             clarity: Number(clarityValue.toFixed(2)),
             pitch: Number(pitchValue.toFixed(2)),
-            confidence: Number(confidenceValue.toFixed(2))
+            confidence: Number(confidenceValue.toFixed(2)),
         });
 
-        tf.dispose([tensorData, volume, clarity, maxIndex, estimatedPitch]);
+        tf.dispose([tensorData, predictedVolume, predictedClarity, maxIndex, predictedPitch]);
         animationRef.current = requestAnimationFrame(analyzeAudioLoop);
     };
 
@@ -117,6 +146,15 @@ export const RecorderScreen = () => {
     const analyzeAudio = async (audioBlob) => {
         const arrayBuffer = await audioBlob.arrayBuffer();//eslint-disable-next-line
         const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
+        if (!analyserRef.current || !model) return;
+
+        const bufferLength = analyserRef.current.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        analyserRef.current.getByteFrequencyData(dataArray);
+        const tensorData = tf.tensor1d(dataArray);
+        const inputTensor = tensorData.expandDims(0);
+        setTrainingData(prev => [...prev, inputTensor]);
+
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (SpeechRecognition) {
             const recognition = new SpeechRecognition();
@@ -130,14 +168,49 @@ export const RecorderScreen = () => {
             };
 
             recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
             };
             recognition.start();
+        } else {
         }
-        else { console.error('SpeechRecognition API is not supported in this browser.'); }
+
         const transcribedText = await transcribeAudio(audioBlob);
         const fillerCount = detectFillerWords(transcribedText);
         setFillerWordCount(fillerCount);
+        const targetValue = getTargetValueFromAudio(audioBlob);
+        setTrainingLabels(prev => [...prev, targetValue]);
+
+        tf.dispose([tensorData]);
+    };
+
+    const trainModel = async () => {
+        if (!model || trainingData.length === 0 || trainingLabels.length === 0) {
+            console.error('No data to train on or model not available');
+            return;
+        }
+
+        const xs = tf.stack(trainingData);
+        const ys = tf.tensor2d(trainingLabels);
+
+        try {
+            await model.fit(xs, ys, {
+                epochs: 10,
+                batchSize: 8,
+                shuffle: true,
+                callbacks: {
+                    onEpochEnd: (epoch, logs) => {
+                        console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
+                    }
+                }
+            });
+        } catch (err) {
+            console.error('Error:', err);
+        } finally {
+            tf.dispose([xs, ys]);
+        }
+    };
+
+    const getTargetValueFromAudio = (audioBlob) => {
+        return [0.5];
     };
 
     const detectFillerWords = (transcript) => {
