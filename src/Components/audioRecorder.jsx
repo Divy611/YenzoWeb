@@ -182,6 +182,7 @@ export const RecorderScreen = () => {
         tf.dispose([tensorData]);
     };
 
+    //eslint-disable-next-line
     const trainModel = async () => {
         if (!model || trainingData.length === 0 || trainingLabels.length === 0) {
             console.error('No data to train on or model not available');
