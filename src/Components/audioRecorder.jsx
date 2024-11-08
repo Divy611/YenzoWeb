@@ -36,11 +36,10 @@ export const RecorderScreen = () => {
     const [trainingLabels, setTrainingLabels] = useState([]);
     const [fillerWordCount, setFillerWordCount] = useState(0);//eslint-disable-next-line
     const [recordingError, setRecordingError] = useState(null);
-    const modelUrl = 'https://raw.githubusercontent.com/Divy611/YenzoWeb/main/src/Models/model.json';
     useEffect(() => {
         const loadModel = async () => {
             try {
-                const loadedModel = await tf.loadLayersModel(modelUrl);
+                const loadedModel = await tf.loadLayersModel('indexeddb://model');
                 loadedModel.compile({ optimizer: 'adam', loss: 'meanSquaredError', metrics: ['accuracy'] });
                 setModel(loadedModel);
                 console.log('Model loaded successfully');
@@ -210,7 +209,7 @@ export const RecorderScreen = () => {
         }
     };
 
-    const getTargetValueFromAudio = (audioBlob) => {
+    const getTargetValueFromAudio = ({ audioBlob }) => {
         return [0.5];
     };
 

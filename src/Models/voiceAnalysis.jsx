@@ -52,7 +52,7 @@ export async function trainModel() {
             },
         });
 
-        await model.save('indexeddb://my-model');
+        await model.save('indexeddb://model');
         console.log('Model saved to IndexedDB');
     } catch (error) {
         console.error('Error during training or saving the model:', error);
