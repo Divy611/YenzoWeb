@@ -39,7 +39,7 @@ export const RecorderScreen = () => {
     useEffect(() => {
         const loadModel = async () => {
             try {
-                const loadedModel = await tf.loadLayersModel('indexeddb://model');
+                const loadedModel = await tf.loadLayersModel('../Models/voiceAnalysis');
                 loadedModel.compile({ optimizer: 'adam', loss: 'meanSquaredError', metrics: ['accuracy'] });
                 setModel(loadedModel);
                 console.log('Model loaded successfully');
@@ -113,13 +113,13 @@ export const RecorderScreen = () => {
         const maxIndex = tf.argMax(tensorData);
         //const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
         const predictedPitch = prediction[2].dataSync()[0];
-        //const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
+        const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
+        //const confidenceValue = calculateConfidence(predictedVolume, predictedClarity, predictedPitch);
         const [volumeValue, clarityValue, pitchValue] = [
             predictedVolume,
             predictedClarity,
             predictedPitch,
         ].map((t) => t.dataSync()[0]);
-        const confidenceValue = calculateConfidence(predictedVolume, predictedClarity, predictedPitch);
 
         setMetrics({
             volume: Number(volumeValue.toFixed(2)),
