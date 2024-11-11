@@ -165,7 +165,6 @@ export const RecorderScreen = () => {
                 const transcript = event.results[0][0].transcript;
                 detectFillerWords(transcript);
             };
-
             recognition.onerror = (event) => {
             };
             recognition.start();
