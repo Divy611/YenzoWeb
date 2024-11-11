@@ -96,49 +96,110 @@ export const RecorderScreen = () => {
             setIsRecording(false);
         }
     };
+    // const analyzeAudioLoop = () => {
+    //     if (!analyserRef.current) return;
+
+    //     const bufferLength = analyserRef.current.frequencyBinCount;
+    //     const dataArray = new Uint8Array(bufferLength);
+    //     analyserRef.current.getByteFrequencyData(dataArray);
+    //     const tensorData = tf.tensor1d(dataArray);
+    //     const volume = tf.mean(tensorData);
+    //     const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tf.log(tensorData.add(1e-6))));
+    //     const maxIndex = tf.argMax(tensorData);
+    //     const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
+    //     const [volumeValue, clarityValue, pitchValue] = [volume, clarity, estimatedPitch].map(t => t.dataSync()[0]);
+    //     const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
+
+    //     setMetrics({
+    //         volume: Number(volumeValue.toFixed(2)),
+    //         clarity: Number(clarityValue.toFixed(2)),
+    //         pitch: Number(pitchValue.toFixed(2)),
+    //         confidence: Number(confidenceValue.toFixed(2)),
+    //     });
+
+    //     tf.dispose([tensorData, volume, clarity, maxIndex, estimatedPitch]);
+    //     animationRef.current = requestAnimationFrame(analyzeAudioLoop);
+    // };
 
     const analyzeAudioLoop = () => {
-        if (!analyserRef.current || model) return;
+        if (!analyserRef.current) return;
 
         const bufferLength = analyserRef.current.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        analyserRef.current.getByteFrequencyData(dataArray);
-        const tensorData = tf.tensor1d(dataArray);
-        const inputTensor = tensorData.expandDims(0);  // Add batch dimension
-        const prediction = model.predict(inputTensor);
-        // const volume = tf.mean(tensorData);
-        const predictedVolume = prediction[0].dataSync()[0];
-        //const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tensorData.add(1e-6)));
-        const predictedClarity = prediction[1].dataSync()[0];
-        const maxIndex = tf.argMax(tensorData);
-        //const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
-        const predictedPitch = prediction[2].dataSync()[0];
-        const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
-        //const confidenceValue = calculateConfidence(predictedVolume, predictedClarity, predictedPitch);
-        const [volumeValue, clarityValue, pitchValue] = [
-            predictedVolume,
-            predictedClarity,
-            predictedPitch,
-        ].map((t) => t.dataSync()[0]);
+        const timeDomainArray = new Uint8Array(bufferLength);
+        const frequencyArray = new Uint8Array(bufferLength);
+        analyserRef.current.getByteTimeDomainData(timeDomainArray);
+        analyserRef.current.getByteFrequencyData(frequencyArray);
+        const volume = calculateRMS(timeDomainArray);
+        const speechBand = frequencyArray.slice(0, Math.floor(bufferLength * 0.25));
+        const noiseBand = frequencyArray.slice(Math.floor(bufferLength * 0.75));
+
+        const speechEnergy = tf.mean(tf.tensor1d(speechBand));
+        const noiseEnergy = tf.mean(tf.tensor1d(noiseBand));
+
+        const snr = tf.clipByValue(speechEnergy.div(noiseEnergy.add(1e-6)), 0, 10);
+        const clarity = snr;
+        const estimatedPitch = detectPitchAutocorrelation(timeDomainArray);
+        const confidenceValue = calculateConfidence(volume, clarity.dataSync()[0], estimatedPitch);
 
         setMetrics({
-            volume: Number(volumeValue.toFixed(2)),
-            clarity: Number(clarityValue.toFixed(2)),
-            pitch: Number(pitchValue.toFixed(2)),
+            volume: Number(volume.toFixed(2)),
+            clarity: Number(clarity.dataSync()[0].toFixed(2)),
+            pitch: Number(estimatedPitch.toFixed(2)),
             confidence: Number(confidenceValue.toFixed(2)),
         });
-
-        tf.dispose([tensorData, predictedVolume, predictedClarity, maxIndex, predictedPitch]);
+        tf.dispose([speechEnergy, noiseEnergy]);
         animationRef.current = requestAnimationFrame(analyzeAudioLoop);
     };
 
+    const calculateRMS = (timeDomainArray) => {
+        let sum = 0;
+        for (let i = 0; i < timeDomainArray.length; i++) {
+            const value = timeDomainArray[i] / 128 - 1;
+            sum += value * value;
+        }
+        return Math.sqrt(sum / timeDomainArray.length) * 100;
+    };
+
+    const detectPitchAutocorrelation = (timeDomainArray) => {
+        const size = timeDomainArray.length;
+        const sampleRate = audioContextRef.current.sampleRate;
+        const normalizedArray = timeDomainArray.map(value => value / 128 - 1);
+        let bestOffset = -1;
+        let bestCorrelation = 0;
+        const correlations = new Array(size).fill(0);
+
+        for (let offset = 0; offset < size / 2; offset++) {
+            let correlation = 0;
+
+            for (let i = 0; i < size / 2; i++) {
+                correlation += normalizedArray[i] * normalizedArray[i + offset];
+            }
+
+            correlations[offset] = correlation;
+
+            if (correlation > bestCorrelation) {
+                bestCorrelation = correlation;
+                bestOffset = offset;
+            }
+        }
+
+        if (bestCorrelation > 0.01) {
+            const frequency = sampleRate / bestOffset;
+            return frequency;
+        }
+        return 0;
+    };
+
+    // Improved confidence calculation
     const calculateConfidence = (volume, clarity, pitch) => {
-        const avgVolume = 128;
-        const pitchThreshold = 100;
-        const clarityConfidence = Math.min(clarity / 1, 1);
-        const volumeConfidence = Math.min(Math.abs(volume - avgVolume) / avgVolume, 1);
-        const pitchConfidence = Math.min(Math.abs(pitch - pitchThreshold) / pitchThreshold, 1);
-        const overallConfidence = (volumeConfidence + pitchConfidence + clarityConfidence) / 3;
+        const avgVolume = 0.5;
+        //const pitchThreshold = 100;
+
+        const clarityConfidence = Math.min(clarity / 10, 1);
+        const volumeConfidence = 1 - Math.min(Math.abs(volume - avgVolume) / avgVolume, 1);
+        const pitchConfidence = pitch > 50 && pitch < 500 ? 1 : 0;
+        const overallConfidence = (clarityConfidence * 0.5 + volumeConfidence * 0.3 + pitchConfidence * 0.2);
+
         return overallConfidence * 100;
     };
 
