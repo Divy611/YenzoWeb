@@ -82,7 +82,7 @@ function AppContent({ authStatus, setAuthStatus }) {
         <Route component={PageNotFound} />
       </Switch>
       {showFooter() && <Footer />}
-    </ >
+    </>
   );
 }
 

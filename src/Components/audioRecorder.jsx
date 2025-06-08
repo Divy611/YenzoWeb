@@ -33,23 +33,9 @@ export const RecorderScreen = () => {
     const [audioUrl, setAudioUrl] = useState(null);
     const [trainingData, setTrainingData] = useState([]);
     const [isRecording, setIsRecording] = useState(false);//eslint-disable-next-line
-    const [trainingLabels, setTrainingLabels] = useState([]);
     const [fillerWordCount, setFillerWordCount] = useState(0);//eslint-disable-next-line
     const [recordingError, setRecordingError] = useState(null);
     useEffect(() => {
-        const loadModel = async () => {
-            try {
-                const loadedModel = await tf.loadLayersModel('../Models/voiceAnalysis');
-                loadedModel.compile({ optimizer: 'adam', loss: 'meanSquaredError', metrics: ['accuracy'] });
-                setModel(loadedModel);
-                console.log('Model loaded successfully');
-            } catch (err) {
-                console.error('Error loading the model:', err);
-            }
-        };
-
-        loadModel();
-
         return () => {
             stopRecording();
             if (audioContextRef.current) audioContextRef.current.close();
@@ -96,46 +82,21 @@ export const RecorderScreen = () => {
             setIsRecording(false);
         }
     };
-    // const analyzeAudioLoop = () => {
-    //     if (!analyserRef.current) return;
-
-    //     const bufferLength = analyserRef.current.frequencyBinCount;
-    //     const dataArray = new Uint8Array(bufferLength);
-    //     analyserRef.current.getByteFrequencyData(dataArray);
-    //     const tensorData = tf.tensor1d(dataArray);
-    //     const volume = tf.mean(tensorData);
-    //     const clarity = tf.exp(tf.mean(tf.log(tensorData.add(1e-6)))).div(tf.mean(tf.log(tensorData.add(1e-6))));
-    //     const maxIndex = tf.argMax(tensorData);
-    //     const estimatedPitch = maxIndex.mul(audioContextRef.current.sampleRate / analyserRef.current.fftSize);
-    //     const [volumeValue, clarityValue, pitchValue] = [volume, clarity, estimatedPitch].map(t => t.dataSync()[0]);
-    //     const confidenceValue = calculateConfidence(volumeValue, clarityValue, pitchValue);
-
-    //     setMetrics({
-    //         volume: Number(volumeValue.toFixed(2)),
-    //         clarity: Number(clarityValue.toFixed(2)),
-    //         pitch: Number(pitchValue.toFixed(2)),
-    //         confidence: Number(confidenceValue.toFixed(2)),
-    //     });
-
-    //     tf.dispose([tensorData, volume, clarity, maxIndex, estimatedPitch]);
-    //     animationRef.current = requestAnimationFrame(analyzeAudioLoop);
-    // };
-
     const analyzeAudioLoop = () => {
         if (!analyserRef.current) return;
 
         const bufferLength = analyserRef.current.frequencyBinCount;
         const timeDomainArray = new Uint8Array(bufferLength);
         const frequencyArray = new Uint8Array(bufferLength);
+
         analyserRef.current.getByteTimeDomainData(timeDomainArray);
         analyserRef.current.getByteFrequencyData(frequencyArray);
+
         const volume = calculateRMS(timeDomainArray);
         const speechBand = frequencyArray.slice(0, Math.floor(bufferLength * 0.25));
         const noiseBand = frequencyArray.slice(Math.floor(bufferLength * 0.75));
-
         const speechEnergy = tf.mean(tf.tensor1d(speechBand));
         const noiseEnergy = tf.mean(tf.tensor1d(noiseBand));
-
         const snr = tf.clipByValue(speechEnergy.div(noiseEnergy.add(1e-6)), 0, 10);
         const clarity = snr;
         const estimatedPitch = detectPitchAutocorrelation(timeDomainArray);
@@ -161,16 +122,15 @@ export const RecorderScreen = () => {
     };
 
     const detectPitchAutocorrelation = (timeDomainArray) => {
+        let bestOffset = -1;
+        let bestCorrelation = 0;
         const size = timeDomainArray.length;
         const sampleRate = audioContextRef.current.sampleRate;
         const normalizedArray = timeDomainArray.map(value => value / 128 - 1);
-        let bestOffset = -1;
-        let bestCorrelation = 0;
         const correlations = new Array(size).fill(0);
 
         for (let offset = 0; offset < size / 2; offset++) {
             let correlation = 0;
-
             for (let i = 0; i < size / 2; i++) {
                 correlation += normalizedArray[i] * normalizedArray[i + offset];
             }
@@ -190,22 +150,16 @@ export const RecorderScreen = () => {
         return 0;
     };
 
-    // Improved confidence calculation
     const calculateConfidence = (volume, clarity, pitch) => {
         const avgVolume = 0.5;
-        //const pitchThreshold = 100;
-
         const clarityConfidence = Math.min(clarity / 10, 1);
         const volumeConfidence = 1 - Math.min(Math.abs(volume - avgVolume) / avgVolume, 1);
         const pitchConfidence = pitch > 50 && pitch < 500 ? 1 : 0;
         const overallConfidence = (clarityConfidence * 0.5 + volumeConfidence * 0.3 + pitchConfidence * 0.2);
-
         return overallConfidence * 100;
     };
 
     const analyzeAudio = async (audioBlob) => {
-        const arrayBuffer = await audioBlob.arrayBuffer();//eslint-disable-next-line
-        const audioBuffer = await audioContextRef.current.decodeAudioData(arrayBuffer);
         if (!analyserRef.current || !model) return;
 
         const bufferLength = analyserRef.current.frequencyBinCount;
@@ -226,61 +180,23 @@ export const RecorderScreen = () => {
                 const transcript = event.results[0][0].transcript;
                 detectFillerWords(transcript);
             };
-            recognition.onerror = (event) => {
-            };
+            recognition.onerror = () => { };
             recognition.start();
-        } else {
-        }
+        } else { }
 
         const transcribedText = await transcribeAudio(audioBlob);
         const fillerCount = detectFillerWords(transcribedText);
         setFillerWordCount(fillerCount);
-        const targetValue = getTargetValueFromAudio(audioBlob);
-        setTrainingLabels(prev => [...prev, targetValue]);
 
         tf.dispose([tensorData]);
-    };
-
-    //eslint-disable-next-line
-    const trainModel = async () => {
-        if (!model || trainingData.length === 0 || trainingLabels.length === 0) {
-            console.error('No data to train on or model not available');
-            return;
-        }
-
-        const xs = tf.stack(trainingData);
-        const ys = tf.tensor2d(trainingLabels);
-
-        try {
-            await model.fit(xs, ys, {
-                epochs: 10,
-                batchSize: 8,
-                shuffle: true,
-                callbacks: {
-                    onEpochEnd: (epoch, logs) => {
-                        console.log(`Epoch ${epoch}: loss = ${logs.loss}, accuracy = ${logs.acc}`);
-                    }
-                }
-            });
-        } catch (err) {
-            console.error('Error:', err);
-        } finally {
-            tf.dispose([xs, ys]);
-        }
-    };
-
-    const getTargetValueFromAudio = ({ audioBlob }) => {
-        return [0.5];
     };
 
     const detectFillerWords = (transcript) => {
         const words = transcript.toLowerCase().split(' ');
         const fillerCount = words.filter(word => fillerWords.includes(word)).length;
-
-        console.log('Filler words detected:', fillerCount);
         setFillerWordCount(fillerCount);
     };
-    const transcribeAudio = async (audioBlob) => {
+    const transcribeAudio = async () => {
         return new Promise((resolve, reject) => {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -299,7 +215,6 @@ export const RecorderScreen = () => {
                 resolve(transcript);
             };
             recognition.onerror = (event) => {
-                console.error('Speech recognition error:', event.error);
                 resolve('');
             };
             recognition.start();
@@ -340,25 +255,46 @@ export const RecorderScreen = () => {
     const greetingText = `Hi, User!`;
     const [index, setIndex] = useState(0);
     const [typedText, setTypedText] = useState('');
+    const [voicesLoaded, setVoicesLoaded] = useState(false);
     const fullText = `Ready to begin a new session? Click the button below to start talking!`;
 
     useEffect(() => {
         if (index < fullText.length) {
-            const timeout = setTimeout(() => { setTypedText(prev => prev + fullText[index]); setIndex(index + 1); }, 20);
+            const timeout = setTimeout(() => {
+                setTypedText(prev => prev + fullText[index]);
+                setIndex(index + 1);
+            }, 20);
             return () => clearTimeout(timeout);
         }
     }, [index, fullText]);
+
     useEffect(() => {
-        if (!hasSpoken.current) {
+        if (window.speechSynthesis.getVoices().length > 0) {
+            setVoicesLoaded(true);
+        } else {
+            window.speechSynthesis.onvoiceschanged = () => {
+                setVoicesLoaded(true);
+            };
+        }
+    }, [greetingText, fullText]);
+
+    useEffect(() => {
+        if (voicesLoaded && !hasSpoken.current) {
             const speakText = () => {
                 const utterance = new SpeechSynthesisUtterance(greetingText + fullText);
                 utterance.lang = 'en-US';
+                const voices = window.speechSynthesis.getVoices();
+                const femaleVoice = voices.find(voice => voice.name === 'Google UK English Female');
+
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
                 window.speechSynthesis.speak(utterance);
             };
             speakText();
             hasSpoken.current = true;
         }
-    }, [greetingText, fullText]);
+    }, [voicesLoaded, greetingText, fullText]);
     return (
         <div className={`flex flex-col h-[100vh] justify-between items-center overflow-y-hidden bg-[#151418]`}>
             <header className='p-6 w-full'>
@@ -398,7 +334,7 @@ export const RecorderScreen = () => {
                             <div className="px-5 py-3.5 flex justify-between items-center justify-between border-t border-green-600">
                                 <h2 className="text-white text-start text-md">You were better <br />than</h2>
                                 <div className="flex items-center">
-                                    <h1 className="text-white text-2xl font-extrabold">{'50' || 'NA'}%</h1>
+                                    <h1 className="text-white text-2xl font-extrabold">{' '}%</h1>
                                     <p className='ml-2 text-white'>Of the users!</p>
                                 </div>
                             </div>

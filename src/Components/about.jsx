@@ -4,7 +4,7 @@ import About2 from '../assets/about2.png'
 import About3 from '../assets/about3.png'
 import About4 from '../assets/about4.png'
 import About5 from '../assets/about5.png'
-import { Stats, FeatureTile, EmailInput } from './home'
+import { Stats, EmailInput } from './home'
 import { useScroll, useTransform, motion } from 'framer-motion'
 
 export default function About() {
@@ -49,6 +49,14 @@ const MainSection = () => {
 }
 
 const Features = () => {
+    const FeatureTile = ({ title, subtitle, delay }) => {
+        return (
+            <motion.div initial={{ opacity: 0, y: 25 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: delay }} className="p-4 md:w-1/3 flex flex-col text-center items-center flex-grow">
+                <h2 className="text-white text-2xl font-extrabold mb-3">{title}</h2>
+                <p className="text-gray-200 text-md">{subtitle}</p>
+            </motion.div>
+        )
+    }
     return (
         <section className="container px-7 py-8 mx-auto">
             <div className="text-center mb-20">

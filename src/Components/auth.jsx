@@ -55,7 +55,8 @@ export default function Login({ setAuthStatus }) {
             <h1 className='text-white'>Don't have an account? <a href="/home" className='text-green-600'>Sign Up Today!</a></h1>
         </form>
     )
-}//eslint-disable-next-line
+}
+//eslint-disable-next-line
 export function Signup({ setAuthStatus }) {
     const [email, setEmail] = useState('');//eslint-disable-next-line
     const [message, setMessage] = useState('');
